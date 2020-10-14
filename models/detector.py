@@ -4,10 +4,11 @@ import copy
 class Detector():
     '''Класс описывающий отдельный датчик
         kks - kks датчика
-        indications - список из Indication(датаи время, значение, статус)'''
+        indications - список из Indication(датаи время, значение, статус)
+    '''
 
     def __init__(self, kks, description=''):
-        """KKS датчика, массив значений типа Indication"""
+        '''KKS датчика, массив значений типа Indication'''
         self.kks = kks
         self.description = description
         self.indicationList = list()
@@ -57,8 +58,8 @@ class Detector():
 
     def add_indication_list(self, indicationList):
         ''' добавить массив значений indicationList,
-        каждый элемент типа Indication'''
-
+            каждый элемент типа Indication
+        '''
         for indication in indicationList:
             self.add_indication(indication)
 
@@ -71,6 +72,7 @@ class Detector():
 
     def count(self):
         '''количество показаний'''
+        return len(self.get_value_list())
 
     def __repr__(self):
         '''представление для печати'''
@@ -86,4 +88,5 @@ class Detector():
         return copy.deepcopy(self)
 
     def copy_indication_list(self):
+        ''' скопировать indicationList'''
         return copy.deepcopy(self.indicationList)

@@ -1,4 +1,7 @@
 # -*- coding: utf-8 -*-
+'''
+View вкладки Данные
+'''
 from PyQt5 import QtWidgets,QtCore, QtGui
 from ui_mini_canvas_widget import MiniCanvasWidget
 import re
@@ -15,20 +18,20 @@ class DataWidget(QtWidgets.QWidget):
         self.parent = parent
         
         self.detectorController = detectorController
-        #картинка при загрузке файла
+        # картинка при загрузке файла
         self.splash = QtWidgets.QSplashScreen(QtGui.QPixmap(r"pic/loading.jpg"))
-        self.splash.resize(120,140)
+        self.splash.resize(120, 140)
         
 #         ЛЕВАЯ ЧАСТЬ ЭКРАНА
         
-#         кнопка открыть файл
+        # кнопка открыть файл
         self.btnOpenFile = QtWidgets.QPushButton('Открыть новый файл')    
-#         фильтр для kks
+        # фильтр для kks
         kksFilterBox = QtWidgets.QHBoxLayout()
         kksFilterBox.addWidget(QtWidgets.QLabel('Маска:'))
         self.kksFilterEdit = QtWidgets.QLineEdit()
         kksFilterBox.addWidget(self.kksFilterEdit)
-#         listView для списка kks
+        # listView для списка kks
         self.kksView = QtWidgets.QListWidget()
         self.kksView.setSelectionMode(QtWidgets.QAbstractItemView.ExtendedSelection)
         
@@ -38,10 +41,10 @@ class DataWidget(QtWidgets.QWidget):
         leftBox.addWidget(self.kksView)
         
 #         ПРАВАЯ ЧАСТЬ ЭКРАНА
-#       MPL для рисования графика
+        # MPL для рисования графика
         self.canvasWidget = MiniCanvasWidget(self)
         self.canvasWidget.setContextMenuPolicy(QtCore.Qt.CustomContextMenu)
-#         Дата и время для начала и окончания построения графика
+        # Дата и время для начала и окончания построения графика
         self.startTimeEdit = QtWidgets.QDateTimeEdit()
         self.startTimeEdit.setDisplayFormat('dd.MM.yyyy HH:mm:ss')
         self.finishTimeEdit = QtWidgets.QDateTimeEdit()
@@ -55,11 +58,11 @@ class DataWidget(QtWidgets.QWidget):
                 
 #         ГЛАВНЫЙ ЭКРАН
         mainBox = QtWidgets.QGridLayout()
-        mainBox.addLayout(leftBox,0,0,2,1)
-        mainBox.setColumnStretch(0,0)
-        mainBox.addWidget(self.canvasWidget,0,1,1,1)
-        mainBox.addLayout(dateBox,1,1,1,1)
-        mainBox.setColumnStretch(1,1)
+        mainBox.addLayout(leftBox, 0, 0, 2, 1)
+        mainBox.setColumnStretch(0, 0)
+        mainBox.addWidget(self.canvasWidget, 0, 1, 1, 1)
+        mainBox.addLayout(dateBox, 1, 1, 1, 1)
+        mainBox.setColumnStretch(1, 1)
         self.setLayout(mainBox)
         self.setAcceptDrops(True)
         
@@ -76,7 +79,7 @@ class DataWidget(QtWidgets.QWidget):
    
     @QtCore.pyqtSlot()
     def on_clicked_open_file(self):
-        '''Открыть файлы с данными, удалить старые данные - ok '''
+        '''Открыть файлы с данными, удалить старые данные'''
         print('on_clicked_open_file')
         filesNames = QtWidgets.QFileDialog.getOpenFileNames(self, 'Open files')[0]
         if filesNames:
@@ -84,7 +87,7 @@ class DataWidget(QtWidgets.QWidget):
 
     @QtCore.pyqtSlot()
     def on_clicked_add_file(self):
-        '''Добавить файлы с данными в имеющийя список - ok'''
+        '''Добавить файлы с данными в имеющийя список'''
         print('on_clicked_add_file')
         filesNames = QtWidgets.QFileDialog.getOpenFileNames(self, 'Open files')[0]
         if filesNames:
@@ -92,30 +95,33 @@ class DataWidget(QtWidgets.QWidget):
     
     @QtCore.pyqtSlot()        
     def on_changed_item(self):
-        '''Выбор другого датчика из списка - ok'''
-#         получаю kks
+        '''Выбор другого датчика из списка'''
         print('on_changed_item')
+        # получаю kks
         if self.kksView.currentRow() != -1:
             current_kks = self.kksView.model().data(self.kksView.currentIndex())
             self.detectorController.update_current_detector(current_kks)
-            self.update_date_time()
             self.canvasWidget.new_plot(self.detectorController.currentDetector,
                                        self.detectorController.minOptimalTime,
                                        self.detectorController.maxOptimalTime)
+            self.update_date_time()
     
     @QtCore.pyqtSlot()    
     def on_change_datetime(self):
-        '''перерисовка при изменении времени - ok'''
+        '''перерисовка при изменении времени'''
         print('on_change_datetime')
         if self.changeDateTime:
-            self.detectorController.update_date(self.startTimeEdit.dateTime().toPyDateTime(),self.finishTimeEdit.dateTime().toPyDateTime())
+            self.detectorController.update_date(self.startTimeEdit.dateTime().toPyDateTime(),
+                                                self.finishTimeEdit.dateTime().toPyDateTime())
             self.detectorController.update_current_detector()
+            self.update_date_time()
             self.canvasWidget.new_plot(self.detectorController.currentDetector,
                                        self.detectorController.minOptimalTime,
                                        self.detectorController.maxOptimalTime)
 
     @QtCore.pyqtSlot()
     def changed_kks_mask(self):
+        ''' Ввод данных в поле маска '''
         print('changed_kks_mask')
         reg = self.kksFilterEdit.text().strip()
         if reg== '':
@@ -124,7 +130,7 @@ class DataWidget(QtWidgets.QWidget):
         changeKksList = list()
         for detect in self.detectorController.allDetectors:
             kks = detect.get_kks() 
-            res = re.match(reg,kks)
+            res = re.match(reg, kks)
             if res:
                 changeKksList.append(kks)
         self.kksView.clear()
@@ -132,14 +138,14 @@ class DataWidget(QtWidgets.QWidget):
 
     @QtCore.pyqtSlot()
     def on_reset_time(self):
-        '''сброс времени(отрисовка всех данных по датчику) -ok'''
+        '''сброс времени(отрисовка всех данных по датчику)'''
         print('on_reset_time')
         self.detectorController.reset_start_finish_date()
         self.detectorController.update_current_detector()
         self.update_date_time()
         self.canvasWidget.new_plot(self.detectorController.currentDetector)
             
-#         DRAG AND DROP -ok
+    # DRAG AND DROP
     def dragEnterEvent(self,e):
         if e.mimeData().hasUrls():
             e.accept()
@@ -152,7 +158,7 @@ class DataWidget(QtWidgets.QWidget):
         self.open_files(filesNames, isNewList=False)
         
         
-#     МЕНЮ ПРИ НАЖАТИИ НА СПИСОК
+    # МЕНЮ ПРИ НАЖАТИИ НА СПИСОК
     def eventFilter(self, source, event):
         '''обработка событий при клике на listview'''
         if (event.type() == QtCore.QEvent.ContextMenu and source is self.kksView):
@@ -165,7 +171,7 @@ class DataWidget(QtWidgets.QWidget):
                 item:QtWidgets.QListWidgetItem = source.itemAt(event.pos())
         return super(DataWidget,self).eventFilter(source,event)
     
-#     МЕНЮ ПРИ НАЖАТИИ НА ГРАФИК
+    # МЕНЮ ПРИ НАЖАТИИ НА ГРАФИК
     def canvas_context_menu(self,point):
         menu = QtWidgets.QMenu()
         menu.addAction('Сбросить время', self.on_reset_time)
@@ -174,7 +180,7 @@ class DataWidget(QtWidgets.QWidget):
 #     ВСПОМОГАТЕЛЬНЫЕ МЕТОДЫ
     def open_files(self, filesNames, isNewList = False):
         '''загрузка файлов
-        при загрузке отображается картинка Loading из - ok'''
+        при загрузке отображается картинка Loading'''
         print('open_files')
         self.canvasWidget.clear()
         self.splash.show()
@@ -189,6 +195,8 @@ class DataWidget(QtWidgets.QWidget):
         print('finish_open')
 
     def update_kks_view(self):
+        ''' Обновление kksList
+        удаляет старый и создает новый ListView'''
         print('update_kks_view')
         self.kksView.clear()
         self.kksView.addItems(self.detectorController.allDetectors.get_all_kks())
@@ -196,7 +204,7 @@ class DataWidget(QtWidgets.QWidget):
         self.changed_kks_mask()
     
     def update_date_time(self):
-        '''обновить дату и время начала и окнчания данных - ok'''
+        '''обновить дату и время начала и окнчания данных'''
         print('update_date_time')
         self.changeDateTime = False
 #         обновляем дату и время, за которые есть данные
@@ -223,7 +231,7 @@ class DataWidget(QtWidgets.QWidget):
         
             
     def on_mooving_avarage(self):
-        '''расчет с применением коэффициента сглаживания'''
+        '''расчет с применением коскользящего среднего'''
         print('on_mooving_avarage')
         koef, ok = QtWidgets.QInputDialog.getInt(self,'Скользящее среднее', 'Период скользящей средней',
                                                  value = 10, min = 2, max = 100, step = 1)

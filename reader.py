@@ -63,7 +63,7 @@ class RsaReader():
                     line = line[line.find('=') + 1:-2]
                     indications = line.split(';')
                     # получаем дату и время из строки и удаляем из массива
-                    date = datetime.datetime.strptime(indications.pop(0), '%d.%m.%Y %H:%M:%S.%f')
+                    date = datetime.datetime.strptime(indications.pop(0), '%d.%m.%Y %H:%M:%S.%f').replace(microsecond=0)
                     # удалить первое число у первого датчика
                     # у первого датчика 4 значение, первое из которых относится ко всей строке
                     indications[0] = indications[0][indications[0].find(' ') + 1:]
@@ -95,7 +95,7 @@ class SVBUReader():
                 values = line.split('\t')
                 # проверка, если строка начинается с числа(даты), то это строка с данными
                 if (values[0].split('.')[0]).isdigit():
-                    dt = datetime.datetime.strptime(values[0], '%d.%m.%y %H:%M:%S,%f')
+                    dt = datetime.datetime.strptime(values[0], '%d.%m.%y %H:%M:%S,%f').replace(microsecond=0)
                     kks = values[1]
                     value = 0
                     status = 7

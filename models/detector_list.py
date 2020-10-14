@@ -20,7 +20,6 @@ class DetectorList(list):
     
     def extend(self, detectorList2):
         '''расширить список self списком detectorList2'''
-
         for detector in detectorList2:
             allKks = set(self.get_all_kks())
             if detector.get_kks() in allKks:
@@ -28,10 +27,9 @@ class DetectorList(list):
                 detect.extend(detector)   
             else:
                 self.append(detector)
-    
-    
+
+
     def get_detector(self, kks, starttime=None,finishtime=None)->Detector:
-        
         '''возвращает значение с указанным kks за указанный промежуток времени
         если не введено значение starttime, то берется интервал с начала и до finishtime
         если не введено значение finishtime, то берется интервал с starttime и до конца'''
@@ -40,7 +38,7 @@ class DetectorList(list):
             for detect in self:
                 if detect.kks == kks:
                     res = Detector(kks,detect.get_description())
-    #                 выбор среза данных по времени
+                    # выбор среза данных по времени
                     if starttime and finishtime and (starttime<finishtime):
                         res.add_indication_list([val for val in detect.copy_indication_list() if (val.dt>=starttime)&(val.dt<=finishtime)])
                     elif starttime and not finishtime:

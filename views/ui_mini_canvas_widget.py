@@ -1,4 +1,7 @@
 # -*- coding: utf-8 -*-
+'''
+Отрисовка графика на вкладке Данные
+'''
 from PyQt5 import QtWidgets
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as NavigationToolBar
@@ -7,7 +10,9 @@ import matplotlib.dates as dates
 
 
 class Canvas(FigureCanvas):
-    
+    '''
+    Отрисовка графика
+    '''
     def __init__(self, parent = None):
         self.fig = Figure()
         self.ax:Axes = self.fig.add_subplot()
@@ -15,12 +20,12 @@ class Canvas(FigureCanvas):
         self.canvas = FigureCanvas.__init__(self, self.fig)
         self.setParent(parent)
         
-#     отрисовка графика по заданным x,y
-    def plot_graph(self,x=None,y=None, lbl=''):
+    # отрисовка графика по заданным x,y
+    def plot_graph(self, x=None, y=None, lbl=''):
         print('plot_graph')
         xlabel =''
         if len(x) == 1:
-            self.ax.scatter(x,y)
+            self.ax.scatter(x, y)
             xlabel = 'Дата и время: {}'.format(x[0])
         else:
             self.ax.plot(x,y, label = lbl)
@@ -35,45 +40,47 @@ class Canvas(FigureCanvas):
         self.ax.grid()
         self.draw()
     
-#     отрисовка горизонтальной линии
-    def draw_hlines(self, x, minVal = 0, maxVal = 0):
+    # отрисовка горизонтальной линии
+    def draw_hlines(self, x, minVal=0, maxVal=0):
         print('draw h line')
         if minVal == maxVal == 0: minVal, maxVal = self.ax.get_ylim()
-        self.ax.vlines(x, minVal, maxVal, color = 'red', linewidth = 2)
+        self.ax.vlines(x, minVal, maxVal, color='red', linewidth=2)
         self.draw()
         
-#     удаление всех графиков
+    # удаление всех графиков
     def clear_axes(self):      
         self.ax.clear()
         self.draw()
         
 class MiniCanvasWidget(QtWidgets.QWidget):
+    '''
+        Окно с графиком и дополнительными элементами 
+    '''
     def __init__(self,parent):
         super().__init__(parent)
         
         vbox = QtWidgets.QVBoxLayout()
         self.canvas = Canvas(self)
-        self.navigation = NavigationToolBar(self.canvas,self)   
-        vbox.addWidget(self.canvas,1)
-        vbox.addWidget(self.navigation,1)
+        self.navigation = NavigationToolBar(self.canvas, self)   
+        vbox.addWidget(self.canvas, 1)
+        vbox.addWidget(self.navigation, 1)
         self.setLayout(vbox)
     
-#     отрисовка графика
+    # отрисовка графика
     def plot(self,detector,minOptimalTime=None, maxOptimalTime=None):
         print('plot')
-        self.canvas.plot_graph(detector.get_date_list(),detector.get_value_list(),detector.get_kks())
-#         отрисовка вертикальных линий, которые выделяют рекомедуемое для расчета время
+        self.canvas.plot_graph(detector.get_date_list(), detector.get_value_list(), detector.get_kks())
+        # отрисовка вертикальных линий, которые выделяют рекомедуемое для расчета время
         minVal = min(detector.get_value_list())
         maxVal = max(detector.get_value_list())
         if minOptimalTime: self.canvas.draw_hlines(minOptimalTime, minVal, maxVal)
         if maxOptimalTime: self.canvas.draw_hlines(maxOptimalTime, minVal, maxVal)
         
-#     удаление всех графиков   
+    # удаление всех графиков   
     def clear(self):
         self.canvas.clear_axes()
         
-#     рисование нового графика предварительно очистив оси    
+    # рисование нового графика предварительно очистив оси    
     def new_plot(self, detector, minOptimalTime, maxOptimalTime):
         self.clear()
-        self.plot(detector,minOptimalTime, maxOptimalTime)
-        
+        self.plot(detector, minOptimalTime, maxOptimalTime)

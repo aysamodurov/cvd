@@ -10,31 +10,33 @@ paths.append(r"D:\рабочая\DISTR\Python\Thonny\Lib\site-packages\PyQt5\Qt\
 QtCore.QCoreApplication.setLibraryPaths(paths)       
 
 class MyMainWindow(QtWidgets.QMainWindow):
-    '''главное окно приложения'''
+    '''главное окно приложения
+    создание окна с вкладками и основного меню
+    '''
     detectorController = DetectorController()
     
     def __init__(self,parent = None):
         super().__init__(parent)
-        self.resize(1200,700)
-        
+        self.resize(1200, 700)
+        # создание окна с вкладками
         self.tabWidget = QtWidgets.QTabWidget()
         
-        self.dataWidget = DataWidget(self.detectorController,self)
-        self.tabWidget.addTab(self.dataWidget,'Данные')
+        self.dataWidget = DataWidget(self.detectorController, self)
+        self.tabWidget.addTab(self.dataWidget, 'Данные')
         
         self.mainCanvas = MainCanvasWidget(self)
-        self.tabWidget.addTab(self.mainCanvas,'График')
+        self.tabWidget.addTab(self.mainCanvas, 'График')
     
         self.setCentralWidget(self.tabWidget)
         
 #         ОСНОВНОЕ МЕНЮ
         bar:QtWidgets.QMenuBar = self.menuBar()
         fileMenu:QtWidgets.QMenu = bar.addMenu('Файл')
-        openAction = QtWidgets.QAction('Открыть новый файл',self)
+        openAction = QtWidgets.QAction('Открыть новый файл', self)
         openAction.triggered.connect(self.dataWidget.on_clicked_open_file)
-        addAction = QtWidgets.QAction('Добавить файл',self)
+        addAction = QtWidgets.QAction('Добавить файл', self)
         addAction.triggered.connect(self.dataWidget.on_clicked_add_file)
-        closeAction = QtWidgets.QAction('Закрыть',self)
+        closeAction = QtWidgets.QAction('Закрыть', self)
         closeAction.triggered.connect(QtWidgets.qApp.quit)        
                 
         fileMenu.addAction(openAction)

@@ -61,7 +61,7 @@ class DetectorController():
         else:
             self.reset_start_finish_date()
         # выбор оптимального времени
-        self.minOptimalTime, self.maxOptimalTime = calculations.get_optimal_time(self.currentDetector)
+        self.minOptimalTime, self.maxOptimalTime = calculations.get_optimal_detector_time(self.currentDetector)
         print('OPTIMAL ', self.minOptimalTime, self.maxOptimalTime)
 
     def update_current_min_max_date(self):
@@ -77,7 +77,7 @@ class DetectorController():
         print('reset_start_finish_date')
         self.startDate = self.minDate
         self.finishDate = self.maxDate
-        self.minOptimalTime, self.maxOptimalTime = calculations.get_optimal_time(self.currentDetector)
+        self.minOptimalTime, self.maxOptimalTime = calculations.get_optimal_detector_time(self.currentDetector)
 
     def update_date(self, startDate, finishDate):
         print('update_date')
