@@ -1,4 +1,6 @@
 from detector_list import DetectorList
+from sphinx.builders.latex.nodes import captioned_literal_block
+
 from reader import Reader
 import calculations
 
@@ -73,13 +75,19 @@ class DetectorController():
             self.minDate = None
             self.maxDate = None
 
+    # сброс времени и даты в экземпляре класса
     def reset_start_finish_date(self):
         print('reset_start_finish_date')
         self.startDate = self.minDate
         self.finishDate = self.maxDate
         self.minOptimalTime, self.maxOptimalTime = calculations.get_optimal_detector_time(self.currentDetector)
 
+    #обновление даты в экземпляре класса
     def update_date(self, startDate, finishDate):
         print('update_date')
         self.startDate = startDate
         self.finishDate = finishDate
+
+    #автоматический выбор оптимального времени  для расчета
+    def get_optimal_time(self):
+        return calculations.get_optimal_time(self.allDetectors)

@@ -41,16 +41,14 @@ def get_optimal_time(detectorList, times=60):
     for i in range(1, len(valueList[0]) - times):
         sko = 0
         for value in valueList:
-            if len(value)>(i + times):
+            if len(value) > (i + times):
                 maxVal = value[i:i + times].max()
                 if maxVal:
                     sko += value[i:i + times].std()/maxVal
                 else:
                     sko += value[i:i + times].std()
-        if (sko < min_sko) or min_sko!=-1:
+        if (sko < min_sko) or min_sko == -1:
             min_sko = sko
             optimal_pos = i
     dtList = detector.get_date_list()
     return (dtList[optimal_pos], dtList[optimal_pos + times])
-        
-        

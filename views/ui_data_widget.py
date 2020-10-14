@@ -16,8 +16,8 @@ class DataWidget(QtWidgets.QWidget):
         super().__init__(parent)
         changeDateTime = True
         self.parent = parent
-        
         self.detectorController = detectorController
+
         # картинка при загрузке файла
         self.splash = QtWidgets.QSplashScreen(QtGui.QPixmap(r"pic/loading.jpg"))
         self.splash.resize(120, 140)
@@ -144,6 +144,24 @@ class DataWidget(QtWidgets.QWidget):
         self.detectorController.update_current_detector()
         self.update_date_time()
         self.canvasWidget.new_plot(self.detectorController.currentDetector)
+
+    @QtCore.pyqtSlot()
+    def on_choose_optimal_time(self):
+        print('Выбор оптимального времени')
+        #отображение анимации
+        splashCalc = QtWidgets.QSplashScreen(QtGui.QPixmap(r"pic/loading.gif"))
+        splashCalc.resize(200, 200)
+        splashCalc.show()
+        QtWidgets.qApp.processEvents()
+        splashCalc.showMessage("Выбор времени для рсчета",
+                                QtCore.Qt.AlignHCenter | QtCore.Qt.AlignBottom, QtCore.Qt.black)
+        #выбор оптимального времени для расчета
+        ts, tf =self.detectorController.get_optimal_time()
+        #перирисовка графика с полученным временем
+        self.startTimeEdit.setDateTime(ts)
+        self.finishTimeEdit.setDateTime(tf)
+        splashCalc.close()
+
             
     # DRAG AND DROP
     def dragEnterEvent(self,e):
@@ -175,6 +193,7 @@ class DataWidget(QtWidgets.QWidget):
     def canvas_context_menu(self,point):
         menu = QtWidgets.QMenu()
         menu.addAction('Сбросить время', self.on_reset_time)
+        menu.addAction('Выбор стабильного состояния', self.on_choose_optimal_time)
         menu.exec_(self.canvasWidget.mapToGlobal(point))     
     
 #     ВСПОМОГАТЕЛЬНЫЕ МЕТОДЫ
@@ -261,4 +280,3 @@ class DataWidget(QtWidgets.QWidget):
             detector = self.detectorController.allDetectors.get_detector_by_kks(kks)
             self.parent.mainCanvas.plot(detector)
         self.parent.tabWidget.setCurrentIndex(1)
-        
