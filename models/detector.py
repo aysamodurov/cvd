@@ -1,4 +1,5 @@
 import copy
+from detector_statistic import DetectorStat
 
 
 class Detector():
@@ -8,10 +9,11 @@ class Detector():
     '''
 
     def __init__(self, kks, description=''):
-        '''KKS датчика, массив значений типа Indication'''
+        '''KKS датчика, массив значений типа Indication, Статистика по данному датчику'''
         self.kks = kks
         self.description = description
         self.indicationList = list()
+        self.stat = DetectorStat()
 
     # GETTERS
     def get_kks(self):
