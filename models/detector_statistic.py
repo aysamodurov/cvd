@@ -19,3 +19,7 @@ class DetectorStat():
         self.sko = 0
         # погрешность
         self.error = 0
+
+    # расчет статистических данных
+    def calculate(self, detector):
+        pass

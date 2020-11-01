@@ -143,7 +143,9 @@ class DataWidget(QtWidgets.QWidget):
         self.detectorController.reset_start_finish_date()
         self.detectorController.update_current_detector()
         self.update_date_time()
-        self.canvasWidget.new_plot(self.detectorController.currentDetector)
+        self.canvasWidget.new_plot(self.detectorController.currentDetector,
+                                       self.detectorController.minOptimalTime,
+                                       self.detectorController.maxOptimalTime)
 
     @QtCore.pyqtSlot()
     def on_choose_optimal_time(self):

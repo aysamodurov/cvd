@@ -3,13 +3,17 @@ from detector_statistic import DetectorStat
 
 
 class Detector():
-    '''Класс описывающий отдельный датчик
+    '''
+        Класс описывающий отдельный датчик
         kks - kks датчика
         indications - список из Indication(датаи время, значение, статус)
     '''
 
     def __init__(self, kks, description=''):
-        '''KKS датчика, массив значений типа Indication, Статистика по данному датчику'''
+        '''
+        KKS датчика, массив значений типа Indication,
+        Статистика по данному датчику
+        '''
         self.kks = kks
         self.description = description
         self.indicationList = list()
@@ -37,7 +41,7 @@ class Detector():
         return [val.value for val in self.indicationList]
 
     def get_status_list(self):
-        '''возвращает массив значений cтатуса'''
+        ''' возвращает массив значений cтатуса'''
         return [val.status for val in self.indicationList]
 
     def get_start_date(self):
@@ -53,7 +57,8 @@ class Detector():
         ''' добавить одно значение типа Indication
             предварительно проверив есть ли за данное время данные
         '''
-        if not self.indicationList or indication.dt < self.indicationList[0].dt or indication.dt > self.indicationList[-1].dt:
+        if not self.indicationList or indication.dt < self.indicationList[0].dt \
+                or indication.dt > self.indicationList[-1].dt:
             self.indicationList.append(indication)
         elif indication.dt not in self.get_date_list():
             self.indicationList.append(indication)
@@ -76,6 +81,9 @@ class Detector():
         '''количество показаний'''
         return len(self.get_value_list())
 
+    def calc_stat(self, startTime, finishTime):
+        self.stat.calculate(self, startTime, finishTime)
+
     def __repr__(self):
         '''представление для печати'''
         str1 = '{}\t{}\t{}\n'.format(self.kks, self.description, '\t'.join(str(e) for e in self.indicationList))
@@ -92,3 +100,11 @@ class Detector():
     def copy_indication_list(self):
         ''' скопировать indicationList'''
         return copy.deepcopy(self.indicationList)
+
+    def get_value_by_time(self, dt):
+        '''получить значение во время dt'''
+        if self.indicationList[0].dt>dt:
+            return None
+        for val in self.indicationList:
+            if val.dt>=dt: return val
+        return self.indicationList[-1]

@@ -56,8 +56,8 @@ class DetectorController():
         if kks == '':
             kks = self.currentDetector.get_kks()
         self.currentDetector = self.allDetectors.get_detector(kks)
-        self.update_current_min_max_date()
         detect = self.allDetectors.get_detector(kks, self.startDate, self.finishDate)
+        self.update_current_min_max_date()
         if detect.get_indication_list():
             self.currentDetector = detect
         else:
@@ -65,6 +65,9 @@ class DetectorController():
         # выбор оптимального времени
         self.minOptimalTime, self.maxOptimalTime = calculations.get_optimal_detector_time(self.currentDetector)
         print('OPTIMAL ', self.minOptimalTime, self.maxOptimalTime)
+        #Обновить дату и время
+        self.update_date(self.currentDetector.get_start_date(),self.currentDetector.get_finish_date())
+
 
     def update_current_min_max_date(self):
         print('update_current_min_max_date')

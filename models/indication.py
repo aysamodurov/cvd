@@ -7,9 +7,9 @@ class Indication():
 #     конструктор: время, показание, признак достоверности
   
     def __init__(self, dt, value, status):
-        self.dt:datetime.datetime = dt
-        self.value:float = value
-        self.status:int = status  
+        self.dt = dt
+        self.value = value
+        self.status = status
     def __repr__(self):
         return '{}; {}; {}'.format(self.dt, self.value, self.status)
     def __lt__(self, other):
