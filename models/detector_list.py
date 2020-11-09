@@ -108,11 +108,12 @@ if __name__ == '__main__':
     from reader import Reader
     import datetime
 
-    reader = Reader().get_file_reader(r'E:\Project\cvd\data\JEC_284.txt')
+    reader = Reader().get_file_reader(r'E:\Project\cvd\data\PTK-Z.rsa')
     detectorList = reader.read_file()
     startTime = datetime.datetime.fromisoformat('2020-01-30 18:21:00')
     finishTime = datetime.datetime.fromisoformat('2020-01-30 18:21:03')
-    detect = detectorList.get_detector('10JEC33CT003_XQ01', startTime=startTime, finishTime=finishTime)
+    detect = detectorList.get_detector('10JEC10CP832XQ62', startTime=startTime, finishTime=finishTime)
     print(detect)
+    detect.calc_statistic()
     # firstVal = detect.get_value_by_time(datetime.datetime.fromisoformat('2020-01-30 18:22:01'))
     # print(firstVal)

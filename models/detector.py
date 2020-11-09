@@ -1,5 +1,6 @@
 import copy
 from detector_statistic import DetectorStat
+import statistic
 
 
 class Detector():
@@ -108,3 +109,7 @@ class Detector():
         for val in self.indicationList:
             if val.dt>=dt: return val
         return self.indicationList[-1]
+
+    def calc_statistic(self):
+        print('Calculation statistic for detector ', self.get_kks())
+        statistic.calculate_coef_aprox(self.get_value_list())
