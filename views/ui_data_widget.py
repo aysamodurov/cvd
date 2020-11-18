@@ -159,9 +159,11 @@ class DataWidget(QtWidgets.QWidget):
                                 QtCore.Qt.AlignHCenter | QtCore.Qt.AlignBottom, QtCore.Qt.black)
         #выбор оптимального времени для расчета
         ts, tf =self.detectorController.get_optimal_time()
+        print('111', ts,tf)
         #перирисовка графика с полученным временем
-        self.startTimeEdit.setDateTime(ts)
-        self.finishTimeEdit.setDateTime(tf)
+        if ts:
+            self.startTimeEdit.setDateTime(ts)
+            self.finishTimeEdit.setDateTime(tf)
         splashCalc.close()
 
             

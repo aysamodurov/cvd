@@ -1,5 +1,4 @@
 from detector_list import DetectorList
-from sphinx.builders.latex.nodes import captioned_literal_block
 
 from reader import Reader
 import calculations
@@ -93,4 +92,4 @@ class DetectorController():
 
     #автоматический выбор оптимального времени  для расчета
     def get_optimal_time(self):
-        return calculations.get_optimal_time(self.allDetectors)
+        return calculations.get_optimal_time(self.allDetectors, self.startDate, self.finishDate)

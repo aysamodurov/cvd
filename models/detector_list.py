@@ -63,7 +63,6 @@ class DetectorList(list):
                         startTime += delta
 
                         dates = set(val.dt for val in values)
-                        print(dates)
 
                         while startTime <= finishTime:
                             if startTime in dates:
