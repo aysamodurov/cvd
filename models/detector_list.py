@@ -1,6 +1,7 @@
-from detector import Detector
-from indication import Indication
+from models.detector import Detector
+from models.indication import Indication
 from datetime import timedelta
+
 
 class DetectorList(list):
     '''список из Detector'''
@@ -110,9 +111,9 @@ if __name__ == '__main__':
     reader = Reader().get_file_reader(r'E:\Project\cvd\data\PTK-Z.rsa')
     detectorList = reader.read_file()
     startTime = datetime.datetime.fromisoformat('2020-01-30 18:21:00')
-    finishTime = datetime.datetime.fromisoformat('2020-01-30 18:21:03')
-    detect = detectorList.get_detector('10JEC10CP832XQ62', startTime=startTime, finishTime=finishTime)
-    print(detect)
+    finishTime = datetime.datetime.fromisoformat('2020-01-30 18:21:10')
+    detect:Detector = detectorList.get_detector('10JEC10CP832XQ62', startTime=startTime, finishTime=finishTime)
+    print(detect.get_value_list())
     detect.calc_statistic()
     # firstVal = detect.get_value_by_time(datetime.datetime.fromisoformat('2020-01-30 18:22:01'))
     # print(firstVal)

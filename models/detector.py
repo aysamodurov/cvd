@@ -1,7 +1,5 @@
 import copy
-from detector_statistic import DetectorStat
-import statistic
-
+import models.statistic_utils as statUtils
 
 class Detector():
     '''
@@ -13,12 +11,16 @@ class Detector():
     def __init__(self, kks, description=''):
         '''
         KKS датчика, массив значений типа Indication,
-        Статистика по данному датчику
+        mean - среднее значение
+        sko - СКО
+        error - СКО * Коэффициент Стьюдента
         '''
         self.kks = kks
         self.description = description
         self.indicationList = list()
-        self.stat = DetectorStat()
+        self.mean = 0
+        self.sko = 0
+        self.error = 0
 
     # GETTERS
     def get_kks(self):
@@ -112,4 +114,9 @@ class Detector():
 
     def calc_statistic(self):
         print('Calculation statistic for detector ', self.get_kks())
-        statistic.calculate_coef_aprox(self.get_value_list())
+        values = self.get_value_list()
+        self.mean = statUtils.calcMNKMean(values)
+        self.sko = statUtils.calcSKO(values, self.mean)
+        self.error = statUtils.calcError(self.sko, len(values))
+        print(self.sko)
+        print(self.error)

@@ -2,17 +2,19 @@
 '''
 View вкладки Данные
 '''
-from PyQt5 import QtWidgets,QtCore, QtGui
-from ui_mini_canvas_widget import MiniCanvasWidget
+from PyQt5 import QtWidgets, QtCore, QtGui
 import re
+from ui_mini_canvas_widget import MiniCanvasWidget
 from ma_detector import MaDetector
 from smooth_detector import SmoothDetector
 
 class DataWidget(QtWidgets.QWidget):
-    '''Виджет для отображения в первой вкладке приложения
-        на нем расположен список с kks, фильтр, и график '''
+    '''
+        Виджет для отображения в первой вкладке приложения
+        на нем расположен список с kks, фильтр, и график
+        '''
     
-    def __init__(self, detectorController, parent = None):
+    def __init__(self, detectorController, parent=None):
         super().__init__(parent)
         changeDateTime = True
         self.parent = parent
@@ -257,7 +259,7 @@ class DataWidget(QtWidgets.QWidget):
         '''расчет с применением коскользящего среднего'''
         print('on_mooving_avarage')
         koef, ok = QtWidgets.QInputDialog.getInt(self,'Скользящее среднее', 'Период скользящей средней',
-                                                 value = 10, min = 2, max = 100, step = 1)
+                                                 value=10, min=2, max=100, step=1)
         if ok:
             maDetector = MaDetector(self.detectorController.currentDetector,koef)
             isNew = self.detectorController.allDetectors.insert(maDetector)
