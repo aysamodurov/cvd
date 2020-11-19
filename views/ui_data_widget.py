@@ -103,9 +103,7 @@ class DataWidget(QtWidgets.QWidget):
         if self.kksView.currentRow() != -1:
             current_kks = self.kksView.model().data(self.kksView.currentIndex())
             self.detectorController.update_current_detector(current_kks)
-            self.canvasWidget.new_plot(self.detectorController.currentDetector,
-                                       self.detectorController.minOptimalTime,
-                                       self.detectorController.maxOptimalTime)
+            self.canvasWidget.new_plot(self.detectorController.currentDetector)
             self.update_date_time()
     
     @QtCore.pyqtSlot()    
@@ -117,9 +115,7 @@ class DataWidget(QtWidgets.QWidget):
                                                 self.finishTimeEdit.dateTime().toPyDateTime())
             self.detectorController.update_current_detector()
             self.update_date_time()
-            self.canvasWidget.new_plot(self.detectorController.currentDetector,
-                                       self.detectorController.minOptimalTime,
-                                       self.detectorController.maxOptimalTime)
+            self.canvasWidget.new_plot(self.detectorController.currentDetector)
 
     @QtCore.pyqtSlot()
     def changed_kks_mask(self):
@@ -145,9 +141,7 @@ class DataWidget(QtWidgets.QWidget):
         self.detectorController.reset_start_finish_date()
         self.detectorController.update_current_detector()
         self.update_date_time()
-        self.canvasWidget.new_plot(self.detectorController.currentDetector,
-                                       self.detectorController.minOptimalTime,
-                                       self.detectorController.maxOptimalTime)
+        self.canvasWidget.new_plot(self.detectorController.currentDetector)
 
     @QtCore.pyqtSlot()
     def on_choose_optimal_time(self):

@@ -23,12 +23,12 @@ class Canvas(FigureCanvas):
     # отрисовка графика по заданным x,y
     def plot_graph(self, x=None, y=None, lbl=''):
         print('plot_graph')
-        xlabel =''
+        xlabel = ''
         if len(x) == 1:
-            self.ax.scatter(x, y)
+            self.ax.scatter(x, y, label = lbl)
             xlabel = 'Дата и время: {}'.format(x[0])
         else:
-            self.ax.plot(x,y, label = lbl)
+            self.ax.plot(x, y, label=lbl)
             if x[0].strftime('%d.%m.%y') == x[-1].strftime('%d.%m.%y'):
                 xlabel = 'Дата: {}'.format(x[0].strftime('%d.%m.%Y'))
             else:
@@ -38,6 +38,7 @@ class Canvas(FigureCanvas):
         self.ax.set_xlabel(xlabel, weight='bold', fontsize=13)
         self.ax.xaxis.set_major_formatter(dates.DateFormatter('%H:%M:%S'))
         self.ax.grid()
+        self.ax.legend(loc='lower right')
         self.draw()
     
     # отрисовка горизонтальной линии
@@ -67,20 +68,29 @@ class MiniCanvasWidget(QtWidgets.QWidget):
         self.setLayout(vbox)
     
     # отрисовка графика
-    def plot(self,detector,minOptimalTime=None, maxOptimalTime=None):
+    def plot(self, detector, minOptimalTime=None, maxOptimalTime=None):
         print('plot')
-        self.canvas.plot_graph(detector.get_date_list(), detector.get_value_list(), detector.get_kks())
+        # расчет статистики для датчика
+        detector.calc_statistic()
+        stat = detector.get_statistic()
+        lbl = ''
+        prec = 4-len(str(int(stat['mean'])))
+        if prec < 0: prec = 0
+        for name, val in stat.items():
+            lbl += '{} : {:{width}.{pr}f}\n'.format(name, val,  width=3, pr=prec)
+        self.canvas.plot_graph(detector.get_date_list(), detector.get_value_list(), lbl)
         # отрисовка вертикальных линий, которые выделяют рекомедуемое для расчета время
-        minVal = min(detector.get_value_list())
-        maxVal = max(detector.get_value_list())
-        if minOptimalTime: self.canvas.draw_hlines(minOptimalTime, minVal, maxVal)
-        if maxOptimalTime: self.canvas.draw_hlines(maxOptimalTime, minVal, maxVal)
+        if minOptimalTime and maxOptimalTime:
+            minVal = min(detector.get_value_list())
+            maxVal = max(detector.get_value_list())
+            self.canvas.draw_hlines(minOptimalTime, minVal, maxVal)
+            self.canvas.draw_hlines(maxOptimalTime, minVal, maxVal)
         
     # удаление всех графиков   
     def clear(self):
         self.canvas.clear_axes()
         
     # рисование нового графика предварительно очистив оси    
-    def new_plot(self, detector, minOptimalTime, maxOptimalTime):
+    def new_plot(self, detector):
         self.clear()
-        self.plot(detector, minOptimalTime, maxOptimalTime)
+        self.plot(detector)

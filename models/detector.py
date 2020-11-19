@@ -54,6 +54,10 @@ class Detector():
     def get_finish_date(self):
         '''возвращает дату и время окончания данных'''
         return self.get_date_list()[-1]
+
+    def get_statistic(self):
+        '''возвращает массив со статистикой'''
+        return {'mean' : self.mean, 'sko' : self.sko, 'error': self.error}
     # END GETERS
 
     def add_indication(self, indication):
@@ -83,9 +87,6 @@ class Detector():
     def count(self):
         '''количество показаний'''
         return len(self.get_value_list())
-
-    def calc_stat(self, startTime, finishTime):
-        self.stat.calculate(self, startTime, finishTime)
 
     def __repr__(self):
         '''представление для печати'''
@@ -118,5 +119,3 @@ class Detector():
         self.mean = statUtils.calcMNKMean(values)
         self.sko = statUtils.calcSKO(values, self.mean)
         self.error = statUtils.calcError(self.sko, len(values))
-        print(self.sko)
-        print(self.error)
