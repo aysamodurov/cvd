@@ -184,6 +184,7 @@ class DataWidget(QtWidgets.QWidget):
             menu.addAction('Построить новый график', self.on_new_main_plotting)
             menu.addAction('Добавить график', self.on_add_main_plotting)
             menu.addAction('Произвести сглаживание', self.on_smoothing)
+            menu.addAction('Подбор коэффициента сглаживания', self.on_calc_smooth)
             menu.addAction('Скользящее среднее', self.on_mooving_avarage)
             if menu.exec_(event.globalPos()):
                 item:QtWidgets.QListWidgetItem = source.itemAt(event.pos())
@@ -247,7 +248,40 @@ class DataWidget(QtWidgets.QWidget):
             if isNew:
                 self.kksView.addItem(smDetector.kks)
                 self.kksView.setCurrentRow(self.kksView.count()-1)
-        
+    # подобрать коэффициент сглаживания по заданной допустимой погрешности
+    def on_calc_smooth(self):
+        print('on_calc_smooth')
+        awailableError, ok = QtWidgets.QInputDialog.getDouble(self, 'Подбор коэффициента сглаживания',
+                                                              'Введите допустимую погрешность', value=0, decimals=3)
+        if ok:
+            # подбор коэффициента при котором погрешность будет меньше допустимой
+            # побор производится с шагом 0,05
+            # перешел к 100, вместо еденицы, так как 0,9-0,05 = 0,84999
+            kSmooth = 1
+            while kSmooth>0:
+                kSmooth = round(kSmooth,2)
+                smDetector = SmoothDetector(self.detectorController.currentDetector, kSmooth)
+                smDetector.calc_statistic()
+                if smDetector.get_statistic()['error'] < awailableError:
+                    break
+                kSmooth -= 0.05
+            # вывод результатов
+            if kSmooth == 1:
+                QtWidgets.QMessageBox.information(self, 'Сглаживание не требуется', 'Коэффициент сглаживания равен 1')
+            elif kSmooth > 0:
+                msgBox = QtWidgets.QMessageBox()
+                msgBox.setText('Коэффициент сглаживания равен {}'.format(kSmooth))
+                msgBox.setInformativeText('Добавить в список датчик с коэффициентом сглаживания {}?'.format(kSmooth))
+                msgBox.setStandardButtons(QtWidgets.QMessageBox.Ok|QtWidgets.QMessageBox.Cancel)
+                msgBox.setDefaultButton(QtWidgets.QMessageBox.Ok)
+                ret = msgBox.exec_()
+                if ret == QtWidgets.QMessageBox.Ok:
+                    isNew = self.detectorController.allDetectors.insert(smDetector)
+                    if isNew:
+                        self.kksView.addItem(smDetector.kks)
+                        self.kksView.setCurrentRow(self.kksView.count() - 1)
+            else:
+                QtWidgets.QMessageBox.information(self, 'Внимание', 'Невозможно подобрать коэффициент сглаживания')
             
     def on_mooving_avarage(self):
         '''расчет с применением коскользящего среднего'''
