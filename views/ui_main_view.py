@@ -3,7 +3,7 @@ from PyQt5 import QtWidgets,QtCore
 from detector_controller import DetectorController
 from ui_data_widget import DataWidget
 from ui_main_canvas import MainCanvasWidget
-
+from views.ui_stat_table_view import StatisticTableWidget
 #     настройки для работы QT
 paths = QtCore.QCoreApplication.libraryPaths()
 paths.append(r"D:\рабочая\DISTR\Python\Thonny\Lib\site-packages\PyQt5\Qt\plugins")
@@ -15,7 +15,7 @@ class MyMainWindow(QtWidgets.QMainWindow):
     '''
     detectorController = DetectorController()
     
-    def __init__(self,parent = None):
+    def __init__(self, parent = None):
         super().__init__(parent)
         self.resize(1200, 700)
         # создание окна с вкладками
@@ -26,6 +26,9 @@ class MyMainWindow(QtWidgets.QMainWindow):
         
         self.mainCanvas = MainCanvasWidget(self)
         self.tabWidget.addTab(self.mainCanvas, 'График')
+
+        self.statTable = StatisticTableWidget(self.detectorController)
+        self.tabWidget.addTab(self.statTable, 'Статистика')
     
         self.setCentralWidget(self.tabWidget)
         

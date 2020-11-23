@@ -6,7 +6,6 @@ def calcMNKMean(x):
     в массиве x
     возвращается значение в середине интервала A*x+B
     '''
-    print('calculate A,B for MNK')
     if not x:
         return
     n = len(x)
@@ -16,7 +15,6 @@ def calcMNKMean(x):
     sumI = 0
     sumXI = 0
     sumI2 = 0
-    print(n)
     for (i, val) in enumerate(x):
         i += 1
         sumX += val
@@ -26,7 +24,6 @@ def calcMNKMean(x):
     a = (n * sumXI - sumX * sumI) / (n * sumI2 - sumI ** 2)
     b = 1 / n * (sumX - a * sumI)
     xMean = a * n / 2 + b
-    print(xMean)
     return xMean
 
 #расчет СКО, на входе массив x, и коэффициенты апроксимации A,B
@@ -40,7 +37,6 @@ def calcSKO(x, xMean):
     '''
     if not x:
         return 0
-    print('calc SKO')
     n = len(x)
     if n == 1: return 0
     std = 0

@@ -57,7 +57,8 @@ class Detector():
 
     def get_statistic(self):
         '''возвращает массив со статистикой'''
-        return {'mean' : self.mean, 'sko' : self.sko, 'error': self.error}
+        self.calc_statistic()
+        return {'mean':self.mean, 'sko':self.sko, 'error':self.error}
     # END GETERS
 
     def add_indication(self, indication):

@@ -150,5 +150,3 @@ class MainCanvasWidget(QtWidgets.QWidget):
     def new_plot(self,detector):
         self.clear()
         self.plot(detector)
-
-        

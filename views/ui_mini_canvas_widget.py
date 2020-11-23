@@ -71,7 +71,6 @@ class MiniCanvasWidget(QtWidgets.QWidget):
     def plot(self, detector, minOptimalTime=None, maxOptimalTime=None):
         print('plot')
         # расчет статистики для датчика
-        detector.calc_statistic()
         stat = detector.get_statistic()
         lbl = ''
         prec = 4-len(str(int(stat['mean'])))

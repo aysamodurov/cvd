@@ -1,4 +1,4 @@
-from detector_list import DetectorList
+from models.detector_list import DetectorList
 
 from reader import Reader
 import calculations
@@ -93,3 +93,12 @@ class DetectorController():
     #автоматический выбор оптимального времени  для расчета
     def get_optimal_time(self):
         return calculations.get_optimal_time(self.allDetectors, self.startDate, self.finishDate)
+
+    # получить таблицу, каждаю строка состоит из KKS, статистика
+    # статистика : {'mean' : self.mean, 'sko' : self.sko, 'error': self.error}
+    def get_stats(self):
+        print('get stats')
+        res = []
+        for detect in self.allDetectors:
+            res.append([detect.get_kks(), detect.get_statistic()])
+        return res
