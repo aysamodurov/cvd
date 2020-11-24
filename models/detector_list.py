@@ -41,13 +41,13 @@ class DetectorList(list):
         try:
             for detect in self:
                 if detect.kks == kks:
-                    res = Detector(kks,detect.get_description())
+                    res = Detector(kks, detect.get_description())
                     # проверяем дату и время выборки данных и в случае неправильного ввода берем все данные
                     minDate = detect.get_start_date()
                     maxDate = detect.get_finish_date()
-                    isValidStartTime = startTime and startTime>minDate and startTime<maxDate
+                    isValidStartTime = startTime and startTime > minDate and startTime < maxDate
                     startTime = startTime if isValidStartTime else minDate
-                    isValidFinishTime = finishTime and finishTime>startTime
+                    isValidFinishTime = finishTime and finishTime >= startTime
                     finishTime = finishTime if isValidFinishTime else maxDate
                     # выбор среза данных по времени
                     values = [val for val in detect.copy_indication_list()
@@ -108,12 +108,13 @@ if __name__ == '__main__':
     from reader import Reader
     import datetime
 
-    reader = Reader().get_file_reader(r'E:\Project\cvd\data\PTK-Z.rsa')
+    reader = Reader().get_file_reader(r'E:\Project\cvd\data\JEC_284.txt')
     detectorList = reader.read_file()
-    startTime = datetime.datetime.fromisoformat('2020-01-30 18:21:00')
-    finishTime = datetime.datetime.fromisoformat('2020-01-30 18:21:10')
-    detect:Detector = detectorList.get_detector('10JEC10CP832XQ62', startTime=startTime, finishTime=finishTime)
-    print(detect.get_value_list())
+    # print(detectorList)
+    startTime = datetime.datetime.fromisoformat('2020-01-30 18:22:30')
+    finishTime = datetime.datetime.fromisoformat('2020-01-30 18:22:30')
+    detect:Detector = detectorList.get_detector('10JEC21CT815_XQ01', startTime, finishTime)
+    print(detect)
     detect.calc_statistic()
     # firstVal = detect.get_value_by_time(datetime.datetime.fromisoformat('2020-01-30 18:22:01'))
     # print(firstVal)

@@ -166,6 +166,8 @@ class DataWidget(QtWidgets.QWidget):
 
     @QtCore.pyqtSlot()
     def on_calc_stats(self):
+        if not self.detectorController.currentDetector:
+            return
         print('Calc stat')
         stats = self.detectorController.get_stats()
         self.parent.statTable.fill_table(stats)

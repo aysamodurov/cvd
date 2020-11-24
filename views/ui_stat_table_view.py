@@ -40,6 +40,8 @@ class StatisticTableWidget(QtWidgets.QWidget):
     # stats - [kks, {'mean' : self.mean, 'sko' : self.sko, 'error': self.error}]
     def fill_table(self, stats):
         print('fill table')
+        #очищаю таблицу отстарых дынных
+        self.table.setRowCount(0)
         # заполняю построчно таблицу
         for stat in stats:
             rowPos = self.table.rowCount()

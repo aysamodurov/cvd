@@ -99,6 +99,7 @@ class DetectorController():
     def get_stats(self):
         print('get stats')
         res = []
-        for detect in self.allDetectors:
+        for kks in self.allDetectors.get_all_kks():
+            detect = self.allDetectors.get_detector(kks,self.startDate,self.finishDate)
             res.append([detect.get_kks(), detect.get_statistic()])
         return res
