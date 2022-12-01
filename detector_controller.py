@@ -1,7 +1,8 @@
-from models.detector_list import DetectorList
+from detector_list import DetectorList
 
-from reader import Reader
+from reader import create_reader
 import calculations
+
 
 class DetectorController():
 
@@ -36,7 +37,7 @@ class DetectorController():
 #         загрузка данных из файлов
         for fileName in filesNames:
             self.readedFiles.append(fileName)
-            reader = Reader().get_file_reader(fileName)
+            reader = create_reader(fileName)
             if not reader:
                 print('Файл не найден')
                 return

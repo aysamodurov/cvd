@@ -5,9 +5,9 @@ from ui_data_widget import DataWidget
 from ui_main_canvas import MainCanvasWidget
 from views.ui_stat_table_view import StatisticTableWidget
 #     настройки для работы QT
-paths = QtCore.QCoreApplication.libraryPaths()
-paths.append(r"D:\рабочая\DISTR\Python\Thonny\Lib\site-packages\PyQt5\Qt\plugins")
-QtCore.QCoreApplication.setLibraryPaths(paths)       
+# paths = QtCore.QCoreApplication.libraryPaths()
+# paths.append(r"D:\рабочая\DISTR\Python\Thonny\Lib\site-packages\PyQt5\Qt\plugins")
+# QtCore.QCoreApplication.setLibraryPaths(paths)       
 
 class MyMainWindow(QtWidgets.QMainWindow):
     '''главное окно приложения
