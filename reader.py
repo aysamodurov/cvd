@@ -54,7 +54,6 @@ class Reader():
         """
         Общий для всех наследников метод
         который будет реализован в каждом классе
-        
         Returns:
             DetectorList: список из Detector
         """
@@ -73,7 +72,7 @@ class RsaReader(Reader):
         """чтение из rsa файла
 
         Returns:
-            DetectorList: список из Detector 
+            DetectorList: список из Detector
             или None если файл не существует
         """
         super().read_file()
@@ -102,19 +101,19 @@ class RsaReader(Reader):
                         # у первого датчика 4 значение, первое из которых относится ко всей строке
                         indications[0] = indications[0][indications[0].find(' ') + 1:]
                         for value in indications:
-                                pos, val, status = value.split(' ')
-                                indication = Indication(date, float(val), int(status))
-                                detector_list[int(pos) - 1].add_indication(indication)
+                            position, val, status = value.split(' ')
+                            indication = Indication(date, float(val), int(status))
+                            detector_list[int(position) - 1].add_indication(indication)
                     except ValueError:
                         continue
 
         for detector in detector_list:
-            detector.indicationList.sort()
+            detector.indication_list.sort()
         return detector_list
 
 
 class SVBUReader(Reader):
-    """Реалищация Reader класса для считывания инфомации из 
+    """Реалищация Reader класса для считывания инфомации из
     СВБУ файлов в стандартном формате"""
 
     def read_file(self):
@@ -148,8 +147,8 @@ class SVBUReader(Reader):
         return detector_list
 
 
-class SVBUFixedReader():
-    """Реалищация Reader класса для считывания инфомации из 
+class SVBUFixedReader(Reader):
+    """Реалищация Reader класса для считывания инфомации из
     СВБУ файлов с фиксированным шагом"""
 
     def read_file(self):
@@ -165,24 +164,24 @@ class SVBUFixedReader():
                 if (values[0].split('.')[0]).isdigit():
                     dt = datetime.datetime.strptime(values[0], '%d.%m.%y %H:%M:%S')
 #                 считываем значения
-                if (values[0] == ''):4
-                try:
-                    kks = values[1]
-                    value = 0
-                    status = 7
-                    if is_float(values[2]):
-                        value = float(values[2])
-#                     проверка на достоверность 7- недостоверно, 0 -достоверно
-                        if values[4] == 'дост':
-                            status = 0
-                    desc = values[5]
-#                     добавление нового датчика
-                    detect = Detector(kks, desc)
-                    indication = Indication(dt, value, status)
-                    detect.add_indication(indication)
-                    detector_list.insert(detect)
-                except ValueError:
-                    continue
+                if (values[0] == ''):
+                    try:
+                        kks = values[1]
+                        value = 0
+                        status = 7
+                        if is_float(values[2]):
+                            value = float(values[2])
+                        # проверка на достоверность 7 - недост, 0 - дост
+                            if values[4] == 'дост':
+                                status = 0
+                        desc = values[5]
+    #                     добавление нового датчика
+                        detect = Detector(kks, desc)
+                        indication = Indication(dt, value, status)
+                        detect.add_indication(indication)
+                        detector_list.insert(detect)
+                    except ValueError:
+                        continue
         return detector_list
 
 

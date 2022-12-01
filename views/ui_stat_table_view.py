@@ -1,9 +1,10 @@
 '''вкладка Статистика'''
 from PyQt5 import QtWidgets, QtCore
 
+
 class StatisticTableWidget(QtWidgets.QWidget):
 
-    def __init__(self, detectorController, parent = None):
+    def __init__(self, detectorController, parent=None):
         super().__init__(parent)
         self.detectorController = detectorController
         vbox = QtWidgets.QVBoxLayout()
@@ -35,19 +36,18 @@ class StatisticTableWidget(QtWidgets.QWidget):
         print(res)
         QtWidgets.QApplication.clipboard().setText(res)
 
-
     # заполнение таблицы
-    # stats - [kks, {'mean' : self.mean, 'sko' : self.sko, 'error': self.error}]
+    # stats-[kks, {'mean' : self.mean, 'sko' : self.sko, 'error': self.error}]
     def fill_table(self, stats):
         print('fill table')
-        #очищаю таблицу отстарых дынных
+        # очищаю таблицу отстарых дынных
         self.table.setRowCount(0)
         # заполняю построчно таблицу
         for stat in stats:
             rowPos = self.table.rowCount()
             self.table.insertRow(rowPos)
-            self.table.setItem(rowPos, 0, QtWidgets.QTableWidgetItem(stat[0])) #KKS
-            self.table.setItem(rowPos, 1, QtWidgets.QTableWidgetItem('{:2.5f}'.format(stat[1]['mean']))) #mean
-            self.table.setItem(rowPos, 2, QtWidgets.QTableWidgetItem('{:2.5f}'.format(stat[1]['sko']))) #SKO
+            self.table.setItem(rowPos, 0, QtWidgets.QTableWidgetItem(stat[0])) # KKS
+            self.table.setItem(rowPos, 1, QtWidgets.QTableWidgetItem('{:2.5f}'.format(stat[1]['mean']))) # mean
+            self.table.setItem(rowPos, 2, QtWidgets.QTableWidgetItem('{:2.5f}'.format(stat[1]['sko']))) # SKO
             self.table.setItem(rowPos, 3, QtWidgets.QTableWidgetItem('{:2.5f}'.format(stat[1]['error'])))
             self.table.resizeColumnsToContents()

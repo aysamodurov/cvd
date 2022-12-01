@@ -1,47 +1,44 @@
 # -*- coding: utf-8 -*-
-from PyQt5 import QtWidgets,QtCore
+from PyQt5 import QtWidgets
 from detector_controller import DetectorController
-from ui_data_widget import DataWidget
-from ui_main_canvas import MainCanvasWidget
+from views import DataWidget
+from views import MainCanvasWidget
 from views.ui_stat_table_view import StatisticTableWidget
-#     настройки для работы QT
-# paths = QtCore.QCoreApplication.libraryPaths()
-# paths.append(r"D:\рабочая\DISTR\Python\Thonny\Lib\site-packages\PyQt5\Qt\plugins")
-# QtCore.QCoreApplication.setLibraryPaths(paths)       
+
 
 class MyMainWindow(QtWidgets.QMainWindow):
     '''главное окно приложения
     создание окна с вкладками и основного меню
     '''
     detectorController = DetectorController()
-    
-    def __init__(self, parent = None):
+
+    def __init__(self, parent=None):
         super().__init__(parent)
         self.resize(1200, 700)
         # создание окна с вкладками
         self.tabWidget = QtWidgets.QTabWidget()
-        
+
         self.dataWidget = DataWidget(self.detectorController, self)
         self.tabWidget.addTab(self.dataWidget, 'Данные')
-        
+
         self.mainCanvas = MainCanvasWidget(self)
         self.tabWidget.addTab(self.mainCanvas, 'График')
 
         self.statTable = StatisticTableWidget(self.detectorController)
         self.tabWidget.addTab(self.statTable, 'Статистика')
-    
+
         self.setCentralWidget(self.tabWidget)
-        
+
 #         ОСНОВНОЕ МЕНЮ
-        bar:QtWidgets.QMenuBar = self.menuBar()
-        fileMenu:QtWidgets.QMenu = bar.addMenu('Файл')
+        bar: QtWidgets.QMenuBar = self.menuBar()
+        fileMenu: QtWidgets.QMenu = bar.addMenu('Файл')
         openAction = QtWidgets.QAction('Открыть новый файл', self)
         openAction.triggered.connect(self.dataWidget.on_clicked_open_file)
         addAction = QtWidgets.QAction('Добавить файл', self)
         addAction.triggered.connect(self.dataWidget.on_clicked_add_file)
         closeAction = QtWidgets.QAction('Закрыть', self)
-        closeAction.triggered.connect(QtWidgets.qApp.quit)        
-                
+        closeAction.triggered.connect(QtWidgets.qApp.quit)
+
         fileMenu.addAction(openAction)
         fileMenu.addAction(addAction)
         fileMenu.addAction(closeAction)

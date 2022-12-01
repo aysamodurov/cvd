@@ -4,9 +4,9 @@ View вкладки Данные
 '''
 from PyQt5 import QtWidgets, QtCore, QtGui
 import re
-from ui_mini_canvas_widget import MiniCanvasWidget
-from ma_detector import MaDetector
-from smooth_detector import SmoothDetector
+from views.ui_mini_canvas_widget import MiniCanvasWidget
+from models import MaDetector
+from models import SmoothDetector
 
 
 class DataWidget(QtWidgets.QWidget):

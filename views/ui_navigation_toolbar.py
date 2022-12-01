@@ -1,7 +1,6 @@
 from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as NavigationToolBar2QT
 import os.path
 import re
-
 import matplotlib
 from matplotlib import cm, colors as mcolors, markers, image as mimage
 from matplotlib.backends.qt_compat import QtGui
@@ -9,8 +8,9 @@ from matplotlib.backends.qt_editor import _formlayout
 from PyQt5 import QtWidgets
 
 
-"""Module that provides a GUI-based editor for matplotlib's figure options."""
 def get_icon(name):
+    """Module that provides a GUI-based
+     editor for matplotlib's figure options."""
     basedir = os.path.join(matplotlib.rcParams['datapath'], 'images')
     return QtGui.QIcon(os.path.join(basedir, name))
 
@@ -29,6 +29,7 @@ DRAWSTYLES = {
     'steps-post': 'Steps (Post)'}
 
 MARKERS = markers.MarkerStyle.markers
+
 
 def figure_edit(axes, parent=None):
     """Edit matplotlib figure options"""
@@ -170,7 +171,6 @@ def figure_edit(axes, parent=None):
         datalist.append((curves, "Curves", ""))
     if mappables:
         datalist.append((mappables, "Images, etc.", ""))
-        
 
     def apply_callback(data):
         """This function will be called to apply changes"""
@@ -237,18 +237,17 @@ def figure_edit(axes, parent=None):
             mappable.set_cmap(cm.get_cmap(cmap))
             mappable.set_clim(*sorted([low, high]))
 
-        
         figure = axes.get_figure()
-                # re-generate legend, if checkbox is checked
+        # re-generate legend, if checkbox is checked
         if generate_legend:
             figure.legends.clear()
-            new_legend = figure.legend(loc='lower left', fontsize = 10, ncol = 6, mode = 'expand', borderaxespad = 0.)
+            new_legend = figure.legend(loc='lower left', fontsize=10, ncol=6, mode='expand', borderaxespad=0.)
         # Redraw
         figure.canvas.draw()
-            
+
         if not (axes.get_xlim() == orig_xlim and axes.get_ylim() == orig_ylim):
             figure.canvas.toolbar.push_current()
-    
+
     print('DATALIST')
     print(datalist)
     data = _formlayout.fedit(datalist, title="Figure options", parent=parent,
@@ -256,14 +255,13 @@ def figure_edit(axes, parent=None):
                              apply=apply_callback)
     if data is not None:
         apply_callback(data)
-        
+
 
 class NavigationToolBar(NavigationToolBar2QT):
 
     def __init__(self, canvas, parent, coordinates=True):
         super().__init__(canvas, parent, coordinates=True)
 
-    
     def edit_parameters(self):
         axes = self.canvas.figure.get_axes()
         if not axes:
@@ -275,7 +273,7 @@ class NavigationToolBar(NavigationToolBar2QT):
         else:
             titles = [
                 'Axis - {}'.format(i)
-                for i,ax in enumerate(axes)]
+                for i, ax in enumerate(axes)]
             duplicate_titles = [
                 title for title in titles if titles.count(title) > 1]
             for i, ax in enumerate(axes):

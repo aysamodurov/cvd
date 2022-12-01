@@ -1,5 +1,5 @@
-from reader import create_reader
+from models.statistic_utils import calcMNK, calcMNKMean
 
-reader = create_reader('data/table2.rsa')
-res = reader.read_file()
-# print(res[0])
+a, b = calcMNK([1, 2, 3, 4, 5])
+x = calcMNKMean([1, 2, 3, 4, 5])
+print(a, b, x)
