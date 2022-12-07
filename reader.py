@@ -1,6 +1,7 @@
 from models import Detector
 from models import DetectorList
 from models import Indication
+from utils import timer
 import datetime
 import os
 
@@ -68,6 +69,7 @@ class Reader():
 class RsaReader(Reader):
     """Реалищация Reader класса для считывания инфомации из RSA файлов"""
 
+    @timer
     def read_file(self):
         """чтение из rsa файла
 
@@ -116,6 +118,7 @@ class SVBUReader(Reader):
     """Реалищация Reader класса для считывания инфомации из
     СВБУ файлов в стандартном формате"""
 
+    @timer
     def read_file(self):
         super().read_file()
         if not self.file_exist:
@@ -151,6 +154,7 @@ class SVBUFixedReader(Reader):
     """Реалищация Reader класса для считывания инфомации из
     СВБУ файлов с фиксированным шагом"""
 
+    @timer
     def read_file(self):
         super().read_file()
         if not self.file_exist:

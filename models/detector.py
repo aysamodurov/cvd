@@ -87,7 +87,7 @@ class Detector():
         if self.indication_list[0].dt > dt:
             return self.indication_list[0]
         for val in self.indication_list:
-            if val.dt >= dt: 
+            if val.dt >= dt:
                 return val
         return self.indication_list[-1]
 

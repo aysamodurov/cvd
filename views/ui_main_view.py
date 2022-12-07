@@ -15,6 +15,8 @@ class MyMainWindow(QtWidgets.QMainWindow):
     def __init__(self, parent=None):
         super().__init__(parent)
         self.resize(1200, 700)
+        self.setWindowTitle('CVD 0.1')
+
         # создание окна с вкладками
         self.tabWidget = QtWidgets.QTabWidget()
 
