@@ -4,9 +4,9 @@ from models import Indication
 from models.utils import timer
 import datetime
 import os
-import app_logger
+import logging
 
-log = app_logger.get_logger(__name__)
+log = logging.getLogger(__name__)
 
 
 def create_reader(file_name):

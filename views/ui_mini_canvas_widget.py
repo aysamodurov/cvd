@@ -7,9 +7,9 @@ from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as NavigationToolBar
 from matplotlib.figure import Figure, Axes
 import matplotlib.dates as dates
-import app_logger
+import logging
 
-log = app_logger.get_logger(__name__)
+log = logging.getLogger(__name__)
 
 class Canvas(FigureCanvas):
     '''

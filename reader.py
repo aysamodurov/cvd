@@ -60,7 +60,6 @@ class Reader():
         """
         if os.path.exists(self.file_name):
             self.file_exist = True
-            print('Start read', type(self))
         else:
             self.file_exist = False
         return DetectorList()

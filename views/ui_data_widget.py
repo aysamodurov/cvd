@@ -7,9 +7,9 @@ import re
 from views.ui_mini_canvas_widget import MiniCanvasWidget
 from models import MaDetector
 from models import SmoothDetector
-import app_logger
+import logging
 
-log = app_logger.get_logger(__name__)
+log = logging.getLogger(__name__)
 
 
 

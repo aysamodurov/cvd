@@ -1,8 +1,8 @@
 '''вкладка Статистика'''
 from PyQt5 import QtWidgets, QtCore
-import app_logger
+import logging
 
-log = app_logger.get_logger(__name__)
+log = logging.getLogger(__name__)
 
 
 class StatisticTableWidget(QtWidgets.QWidget):

@@ -1,5 +1,7 @@
 
 import time
+import logging
+log = logging.getLogger(__name__)
 
 
 def timer(func):
@@ -10,6 +12,6 @@ def timer(func):
         start = time.time()
         res = func(*args)
         end = time.time()
-        print('Время работы функции {} - {} секунд'.format(func, end-start))
+        log.info('Время работы функции {} - {} секунд'.format(func, end-start))
         return res
     return wrapper

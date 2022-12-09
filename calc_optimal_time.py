@@ -1,8 +1,8 @@
 import numpy as np
 from datetime import timedelta
-import app_logger
+import logging
 
-log = app_logger.get_logger(__name__)
+log = logging.getLogger(__name__)
 
 
 def get_optimal_detector_time(detector, times=60):

@@ -8,9 +8,9 @@ from views.ui_navigation_toolbar import NavigationToolBar
 from matplotlib.figure import Figure, Axes
 import matplotlib.dates as dates
 import numpy as np
-import app_logger
+import logging
 
-log = app_logger.get_logger(__name__)
+log = logging.getLogger(__name__)
 
 
 class Canvas(FigureCanvas):

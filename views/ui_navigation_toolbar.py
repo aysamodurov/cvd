@@ -166,7 +166,6 @@ def figure_edit(axes, parent=None):
     has_sm = bool(mappables)
 
     datalist = [(general, "Axes", "")]
-    print(type(general))
     if curves:
         datalist.append((curves, "Curves", ""))
     if mappables:
@@ -248,8 +247,7 @@ def figure_edit(axes, parent=None):
         if not (axes.get_xlim() == orig_xlim and axes.get_ylim() == orig_ylim):
             figure.canvas.toolbar.push_current()
 
-    print('DATALIST')
-    print(datalist)
+
     data = _formlayout.fedit(datalist, title="Figure options", parent=parent,
                              icon=get_icon('qt4_editor_options.svg'),
                              apply=apply_callback)

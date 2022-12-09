@@ -1,5 +1,8 @@
 import numpy as np
 from datetime import timedelta
+import logging
+
+log = logging.getLogger(__name__)
 
 def get_optimal_detector_time(detector, times=60):
     '''
@@ -11,7 +14,7 @@ def get_optimal_detector_time(detector, times=60):
     '''
     valueList = np.array(detector.get_value_list())
     if len(valueList) <= times:
-        print('Недостаточная выборка данных')
+        log.error('Недостаточная выборка данных')
         return (None, None)
     optimal_pos = 0
     min_sko = valueList[:times].std()
@@ -22,6 +25,7 @@ def get_optimal_detector_time(detector, times=60):
             optimal_pos = i
     dtList = detector.get_date_list()
     return (dtList[optimal_pos], dtList[optimal_pos + times])
+
 
 def get_optimal_time(detectorList, startDate, finishDate, times=60):
     '''

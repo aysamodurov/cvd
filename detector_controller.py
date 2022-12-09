@@ -2,9 +2,11 @@ from models import DetectorList
 
 from models import Reader, create_reader
 import calc_optimal_time
-import app_logger
-log = app_logger.get_logger(__name__)
-        
+import logging
+
+log = logging.getLogger(__name__)
+
+      
 class DetectorController():
 
     def __init__(self):

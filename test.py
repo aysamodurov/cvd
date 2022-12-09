@@ -1,24 +1,12 @@
-import configparser
- 
-
-config = configparser.ConfigParser()
-config.read('config/settings.ini')
-FOLDER = config['detectorInfoFile']['folderpath']
-FILENAME = config['detectorInfoFile']['filename']
-FILEPATH = f"{FOLDER}/{FILENAME}"
-
-try:
-    a = int(input('Enter first number\n'))
-    b = int(input('Enter second number\n'))
-except ValueError:
-    print('Введено не число!!!')
+from models import DetectorsInfo
+import app_logger
 
 
-try:
-    a /= b
-    print(a)
-except ZeroDivisionError:
-    print('Деление на 0 невозможно')
+app_logger.init_logger()
+detectors_info = DetectorsInfo()
+detectors_info.load_from_file()
 
 
-print(f'{a}')
+
+info = detectors_info.get_info('10JKS28FG906XQ01')
+print(info)

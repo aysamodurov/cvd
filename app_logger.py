@@ -1,9 +1,13 @@
+"""
+Инициализация логгера
+"""
 import logging
 import os
 import configparser
 
 
 _log_format = f"%(asctime)s - [%(levelname)s] - %(name)s - (%(filename)s).%(funcName)s(%(lineno)d) - %(message)s"
+
 
 def get_file_handler():
     log_foldername = init_logs_folder()
@@ -12,20 +16,32 @@ def get_file_handler():
     file_handler.setFormatter(logging.Formatter(_log_format))
     return file_handler
 
+
 def get_stream_handler():
     stream_handler = logging.StreamHandler()
     stream_handler.setLevel(logging.WARNING)
     stream_handler.setFormatter(logging.Formatter(_log_format))
     return stream_handler
 
-def get_logger(name):
-    logger = logging.getLogger(name)
-    logger.setLevel(logging.INFO)
-    logger.addHandler(get_file_handler())
-    logger.addHandler(get_stream_handler())
-    return logger
+
+def init_logger():
+    """
+    Инициализация объекта логгера
+    """
+    log_foldername = init_logs_folder()
+    log_filename = f'{log_foldername}/{__name__}.log'
+    # logging.basicConfig(level=logging.INFO, filename=log_filename, filemode='w', format=_log_format)
+    logging.basicConfig(level=logging.INFO, handlers=[get_stream_handler(), get_file_handler()], format=_log_format)
 
 def init_logs_folder():
+    """
+        Получение пути к директории для логгирования
+        из файла конфигурации проекта
+        и создане этой папки в случае если ее нет
+
+        Returns:
+            str: Путь к директории для логгирования
+    """
     config = configparser.ConfigParser()
     config.read('config/settings.ini')
     log_foldername = config['logsFile']['logFolder']
