@@ -1,5 +1,8 @@
 '''вкладка Статистика'''
 from PyQt5 import QtWidgets, QtCore
+import app_logger
+
+log = app_logger.get_logger(__name__)
 
 
 class StatisticTableWidget(QtWidgets.QWidget):
@@ -25,7 +28,7 @@ class StatisticTableWidget(QtWidgets.QWidget):
 
     @QtCore.pyqtSlot()
     def copy_stat(self):
-        print('Copy stats')
+        log.info('Отображение статистики')
         res = 'KKS\tСреднее\tСКО\tПогрешность\n'
         for i in range(0, self.table.rowCount()):
             kks = self.table.model().index(i, 0).data()
@@ -33,13 +36,12 @@ class StatisticTableWidget(QtWidgets.QWidget):
             sko = self.table.model().index(i, 2).data()
             error = self.table.model().index(i, 3).data()
             res = '{}{}\t{}\t{}\t{}\n'.format(res, kks, mean, sko, error)
-        print(res)
         QtWidgets.QApplication.clipboard().setText(res)
 
     # заполнение таблицы
     # stats-[kks, {'mean' : self.mean, 'sko' : self.sko, 'error': self.error}]
     def fill_table(self, stats):
-        print('fill table')
+        log.info('Заполнение таблицы со статистикой')
         # очищаю таблицу отстарых дынных
         self.table.setRowCount(0)
         # заполняю построчно таблицу

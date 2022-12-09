@@ -7,7 +7,9 @@ from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as NavigationToolBar
 from matplotlib.figure import Figure, Axes
 import matplotlib.dates as dates
+import app_logger
 
+log = app_logger.get_logger(__name__)
 
 class Canvas(FigureCanvas):
     '''
@@ -22,7 +24,7 @@ class Canvas(FigureCanvas):
 
     # отрисовка графика по заданным x,y
     def plot_graph(self, x=None, y=None, lbl=''):
-        print('plot_graph')
+        log.info('Отрисовка графика по заданным x,y')
         xlabel = ''
         if len(x) == 1:
             self.ax.scatter(x, y, label=lbl)
@@ -43,7 +45,7 @@ class Canvas(FigureCanvas):
 
     # отрисовка горизонтальной линии
     def draw_hlines(self, x, minVal=0, maxVal=0):
-        print('draw h line')
+        log.info(f'Отрисовка горизонтальной линии x = {x}')
         if minVal == maxVal == 0:
             minVal, maxVal = self.ax.get_ylim()
         self.ax.vlines(x, minVal, maxVal, color='red', linewidth=2)
@@ -51,6 +53,7 @@ class Canvas(FigureCanvas):
 
     # удаление всех графиков
     def clear_axes(self):
+        log.info('Удаление всех графиков')
         self.ax.clear()
         self.draw()
 
@@ -72,7 +75,7 @@ class MiniCanvasWidget(QtWidgets.QWidget):
 
     # отрисовка графика
     def plot(self, detector, minOptimalTime=None, maxOptimalTime=None):
-        print('plot')
+        log.info(f'Отрисовка графика {detector.get_kks()}')
         # расчет статистики для датчика
         stat = detector.get_statistic()
         lbl = ''
@@ -92,9 +95,11 @@ class MiniCanvasWidget(QtWidgets.QWidget):
 
     # удаление всех графиков
     def clear(self):
+        log.info('Удаление всех графиков')
         self.canvas.clear_axes()
 
     # рисование нового графика предварительно очистив оси
     def new_plot(self, detector):
+        log.info('Рисование нового графика предварительно очистив оси')
         self.clear()
         self.plot(detector)

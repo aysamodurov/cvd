@@ -1,0 +1,224 @@
+KKS (Mask KKS)*	Delta*	Name	Munit	Discrete(NULL or any_value)	SystematicError
+1?JEC?1CT8??XQ01	0.5	T ГН	°C		0.5
+1?JEC?3CT8??XQ01	0.5	T ХН	°C		0.5
+10JAA??CT8?1XQ01	1	ТП-3	°C		1
+10JAA??CT8?2XQ01	1	ТП-1А	°C		1
+10JAA??CT8?3XQ01	1	ТП-1Б	°C		1
+10JAA??CT8?4XQ01	1	Т термостат	°C		
+10JAA??CT8?5XQ01	1	Т под крышкой	°C		
+10JEC01FT901XQ02	0.5	VT ср по ХН	°C		
+10JEC02FT901XQ02	0.5	VT ср по ГН	°C		
+10JEC?1FT901XQ02	0.5	VT ГН	°C		
+10JEC?3FT901XQ02	0.5	VT ХН	°C		
+10JEC02FT901XQ01	0.25	T ср по ГН	°C		
+10JEC01FT901XQ01	0.25	T ср по ХН	°C		
+10JEC?1FT901XQ01	0.25	T ГН ср	°C		
+10JEC?3FT901XQ01	0.25	T ХН ср	°C		
+10JEC00FT901XQ01	0.25	dT ср	°C		
+10JEC?0FT001XQ01	0.25	dT в петле	°C		
+10JAA10FT001XQ01	1	Т нас в р-ре	°C		
+10LAB00FT901XQ02	1	ср Т ПВ в ПГ	°C		
+10LAB?0FT001XQ01	1	Т нас в ПГ	°C		
+10LAB?0FT002XQ01	1	Tнас 1к - Т нас 2к	°C		
+10JEC?1FT901XQ03	1	 зап до Тнас	°C		
+10JEC?0CP8?2XQ62	0.006	dP ГЦНА	МПа		
+10BB?00CE8??XQ62	0.07	Част пит ГЦНА	Гц		
+10JAA10CP8??XQ62	0.15	P над АкЗ	МПа		
+10JEB?0CE8??XQ62	100	N ГЦНА	кВт			
+10JR?02ED6???XE1	1	сост. петли	 - 	discrete		
+10JAA10CP201XQ01	0.125	P на выходе	МПа		
+10JAA10FP201XQ01	0.125	P на входе в р-р	МПа		
+10JAA10CP202XQ01	0.125	P АкЗ	МПа		
+10JAA10CP203XQ01	0.004	dP р-ре	МПа		
+10JEA?0CP001XQ01	0.06	P на выходе из ПГ	МПа		
+10LAB?0CT901XQ01	1.7	T ПВ в ПГ	°C		
+10LAB?0CP001BXQ1	0.07	P ПВ в ПГ	МПа		
+10LCQ?5CF001XQ01	0.3	 F непр прод	кг/с		
+10LCQ?6CF001XQ01	0.3	 F период прод	кг/с		
+10LCQ10CF001XQ01	0.8	 F на напоре возвр	кг/с		
+10JAA10FP901XQ01	0.06	ср P над АкЗ	МПа		
+10JEB?0FU001XQ01	1	сост петли	 - 		
+10JKS00FU003XQ01	1	режим работы РУ	 - 		
+10JEC?0FP901XQ01	0.003	ср dP на ГЦНА	МПа		
+10JEC?0FF002XQ01	150	FV в петлях	м3/ч		
+10BB?00FE901XQ01	0.03	ср част пит ГЦНА	Гц		
+10JEB?0FE901XQ01	50	ср N ГЦНА	кВт		
+10JEA?0CL00?XQ01	8	L ПГ	мм		
+10JEC?0FF001XQ01	120	FM в петлях	т/ч		
+10JEC00FF903XQ02	300	сум FV 	м3/ч		
+10JEC00FF903XQ01	240	сум FM	т/ч		
+10JEF10CL905XQ01	0.04	L КД	м		
+10LBA00CP901XQ01	0.004	P ГПК	МПа		
+10JEC?0CP001XQ01	0.004	dP на ПГ	МПа		
+10JAA10FP901XQ02	0.1	V (P) СР НАД АЗ	МПа/ч		
+10JAA10FP901XQ03	0.1	P РЕАКТ	Мпа		
+1CLN0?CU001?XQ31	0.1	N текущая	%Nном		
+1CLN0?CU001?XQ32	0.1	N в диапазоне РД2	%Nном		
+1CLN0?CU001?XQ33	0.1	N в диапазоне РД1	%Nном		
+1CLN0?CU001?XQ34	0.1	N в диапазоне ПД	%Nном		
+1CLN0?CU001?XQ35	0.1	N в диапазоне ИД	%Nном		
+1CLN0?CU001?XQ36	0.1	 N для расчета реактивности (включая АФП)	%Nном		
+1CLN0?CU051?XN01	0.1	Работа в диапазоне (1-ИД, 2-ПД, 3-РД1, 4-РД2)	отн.ед.		
+1CLN0?EH051?XN04	0.1	Проверка АКНП	отн.ед.		
+1CLN0?EH051?XN03	0.1	Проверка АКНП	отн.ед.		
+1CLN0?EH051?XN01	0.1	Неисправность АКНП	отн.ед.		
+10KUB11CQ001XQ01	0.08	C бор р-ре	г/дм3		
+10JDA00FG0??XQ01	1	Положение ОР СУЗ	см		
+10JDA00FG1??XQ01	1	Положение ОР СУЗ	см		
+10JDA00FG9??XQ01	1	рассогласование групп ОР СУЗ			
+10JDA00FG0??XQ02	1.5	Положение ОР СУЗ в %	%		
+10JDA00FG1??XQ02	1.5	Положение ОР СУЗ в %	%		
+10JDA00FG9??XQ02	1	Положение групп ОР СУЗ	%		
+1CLN0?FU001?XQ31	100	Период реактора	сек		
+10JKS55FT???XQ01	1	Расчетная Т на входе в ТВС	°C		
+10JKS53FT???XQ01	1	Расчетная Т на выходе из ТВС	°C		
+10JKS50FT???XQ01	1	DNBT	°C		
+10JKS58FT???XQ01	1.5	DT ТВС расч	°C		
+10JKS56FT0??XQ01	0.8	DT в ТВС по КНИТ	°C		
+10JAA??CX8??XQ01	0.0023	Ток ДПЗ кор	мА		
+10JAA??CX8??XQ03	0.0023	Ток ДПЗ некор	мА		
+10JKS06FX???XQ01	1	KQ	от.ед.		
+10JKS10FX901XQ01	1	Офсет			
+10JKS11FX901XQ01	1	Офсет по ДПЗ			
+10MKA1°CE911XQ01	13	Активная мощность генератора	МВт		
+10MKA10FE911XQ01	13	N ЭЛ	%		
+10JKS85FX???XQ01	1	KQ ИР			
+10JKS86FX???XQ??	1	KV 16 ИР			
+10JKS14FX???XQ0?	1	KV 7			
+10JKS01FX???XQ??	1	KV 16 			
+10JEC00FU001XQ01	33	N 1 контура	МВт		
+10JEC00FU001XQ02	0.5	N 1 контура	%		
+10JEC?0FU001XQ01	17	N петель 1 контура	МВт		
+10JKS00FU001XQ01	18	N ДПЗ	МВт		
+10JKS00FU001XQ02	0.5	N ДПЗ	%		
+10JKS00FU901XQ01	18	N АКЗ	МВт		
+10JKS00FU901XQ02	0.5	N АКЗ	%		
+10JKS00FU901XQ05	18	N АКЗ (ср. для mf)	МВт		
+10JKT00FU001XQ01	19	N АКНП	МВт			
+10JKT00FU001XQ02	0.5	N АКНП	%			
+10LAB00FU001XQ01	33	N 2 контура	МВт		
+10LAB00FU001XQ02	0.5	N 2 контура	%		
+10LAB?0FU001XQ01	0.5	N петель 2 контура	МВт		
+10JKS22FX???XQ0?	1	QED	МВт		
+10JKS27FX???XQ0?	1	QL ПЕРИФ. ТВЭЛ	Вт/м		
+10JKS26FX???XQ0?	1	QL ТВЭГ	Вт/м		
+10JKS25FX???XQ0?	1	QL ТВЭЛ	Вт/м		
+10JKS38FX???XQ??	1	QV			
+10KBA60CQ001XQ01	0.08	Q БОР В ПОДП 1К	г/дм3		
+10JKS00FQ001XQ01	0.1	Крит. конц. БК	г/дм3		
+10LAB?0FF901XQ01	120	МАС F ПВ В ПГ	т/ч		
+10JEF10CL00?XQ01	0.04	L КД	м		
+10JEF10CT910XQ01	1	T В КД	°C		
+10JEF10CP001XQ01	0.1	P В КД	м		
+10LAB00FF903XQ01	100	СУММ МАС F ПВ В ПГ	т/ч		
+10LAB00FF903XQ02	100	СУММ ОБЪЕМ F ПВ В ПГ	м3/ч		
+10LAB?0FF001XQ01	100	F ПВ В ПГ МАСС	т/ч		
+10LAB?0FF002XQ01	100	F ПВ В ПГ ОБЪЕМ	м3/ч		
+
+
+10CML01FP001XQ01	1	P2_ЗАД			
+10CML01FP002XQ01	1	P2_ТЕК			
+10CML01FP003XQ01	1	P2_ЗОНА			
+10CML01FX001XQ01	1	N_ЗАД			
+10CML01FX002XQ01	1	DN_ТЕК			
+
+1CLN0?ER051?XN01	1	АЗ (T)			
+1CLN0?ER051?XN02	1	ПС (T)			
+1CLN0?ER051?XN03	1	АЗ (N)			
+1CLN0?ER051?XN04	1	ПС (N)			
+1CLN0?ER051?XN05	1	ПС (N) (ПД)			
+1CLN0?FU002?XQ31	1	Расчетная реактивность			
+AKNPTIMESTAMP?	1	Метка времени АКНП			
+10JKS28FX0??XQ0?	1	DNBR (7 СЛОЕВ)			
+10JKS28FX1??XQ0?	1	DNBR (7 СЛОЕВ)			
+10JKS87FX???XQ??	1	DNBR (16 СЛОЕВ)			
+10JKS14FG906XQ01	1	ПЛЖ MIN ЗП KV7L			
+10JKS14FG906XQ02	1	ПЛЖ MIN ЗП KV7L(СВБУ)			
+10JKS14FG906XQ03	1	ПЛЖ MIN ЗП KV7L(слой)			
+10JKS14FX906XH01	1	ПР ДП ЗН KV			
+10JKS14FX906XQ01	1	MIN ЗП ДП ЗН KV7L			
+10JKS28FX906XQ?1	1	MIN ЗП ДП ЗН DNBR7L			
+10JKS25FG906XQ01	1	КРД ТВС MIN ЗП QL7L ТВЭЛ			
+10JKS25FG906XQ??	1	НОМ СЛ С MIN ЗП QL7L ТВЭЛ			
+10JKS28FG906XQ01	1	ПЛЖ MIN ЗП DNBR7L			
+10JKS25FX906XH03	1	ПР ДП ЗН QL ТВЭЛ ПЗ-1			
+10JKS25FX906XH04	1	ПР ДП ЗН QL ТВЭЛ АЗ			
+10JKS25FX906XQ??	1	MIN ЗП ПО QL7LTVL			
+10JKS26FG906XQ0?	1	ПЛЖ MIN ЗП QL7L ТВЭГ			
+10JKS27FG906XQ0?	1	ПЛЖ MIN ЗП QL7L ПЕРИФ. ТВЭЛ			
+10JKS27FX906XQ01	1	MIN ЗП ПО QL7L ПЕРИФ. ТВЭЛ			
+10JKS06FG902XQ0?	1	ПЛЖ ТВС С MAX KQ			
+10JKS03FX907XQ01	1	Общее среднеквадратичное отклонение KV			
+10JKS14FX_RF??	1	ПЛЖ МАКС KV7L			
+10JKS24FG906XQ0?	1	ПЛЖ MIN ЗП QL7L			
+10JKS24FX902XQ01	1	MAX QL7L			
+10JKS24FX906XH03	1	ПР ДП ЗН QL ПЗ-1			
+10JKS24FX906XH04	1	ПР ДП ЗН QL АЗ (TXS-A)			
+10JKS24FX906XH05	1	ПР ДП ЗН QL АЗ (TXS-B)			
+10JKS24FX906XQ01	1	MIN ЗП ПО QL7L			
+10JKS06FX_RF??	1	ПЛЖ МАКС KQ			
+10JKS07FX_RF01	1	НАПР ТВС (ПО МОЩНОСТИ)			
+10JKS25FX_RF01	1	ПЛЖ МАКС. QL ТВЭЛ			
+10JKS26FX_RF01	1	ПЛЖ МАКС. QL ТВЭГ			
+10JKS27FX_RF01	1	ПЛЖ МАКС. QL ПЕРИФ. ТВЭЛ			
+10JKS28FX_RF01	1	ПЛЖ МИН DNBR7L			
+10JKS50FT_RF01	1	ПЛЖ МИН DNBT			
+10JKS51FT_RF01	1	ПЛЖ МАКС. Т НА ВЫХ ТВС ПО КНИТ Б			
+10JKS56FT_RF01	1	ПЛЖ МАКС DT В ТВС ПО КНИТ			
+10JKS87FX_RF01	1	ПЛЖ МИН DNBR			
+10JKS94FX_RF01	1	ПЛЖ МАКС KR ТВЭЛ			
+10JKS95FX_RF01	1	ПЛЖ МАКС KR ТВЭГ			
+10JKS96FX_RF01	1	ПЛЖ МАКС KR ПЕРИФ ТВЭЛ			
+10JKS01FG902XQ0?	1	КРД ТВС С MAX KV			
+10JKS07FG902XQ01	1	ПЛЖ ТВС С MAX QVCAS			
+10JKS10FG902XQ0?	1	ПЛЖ ТВС С MAX ОФСЕТ			
+10JKS10FG904XQ0?	1	ПЛЖ ТВС С MIN ОФСЕТ			
+10JKS26FG906XQ??	1	НОМ СЛ С MIN ЗП QL7L ТВЭГ			
+10JKS27FG906XQ??	1	НОМ СЛ С MIN ЗП QL7L ПЕРИФ. ТВЭЛ			
+10JKS28FG906XQ02	1	КРД ТВС MIN ЗП DNBR7L			
+10JKS28FG906XQ03	1	НОМ СЛ С MIN ЗП DNBR7L			
+10JKS28FG906XQ04	1	НОМ ТВС С MIN ЗП DNBR7L			
+10JKS28FG906XQ??	1	НОМ СЛ(ТВС) С MIN ЗП DNBR7L			
+10JKS40FG904XQ01	1	ПЛЖ ТВС С MIN DNBR			
+10JKS41FG902XQ01	1	ПЛЖ ТВС С MAX Q ТВЭЛ В АКЗ 			
+10JKS49FG902XQ0?	1	ПЛЖ MAX QVMF			
+10JKS50FG904XQ01	1	ПЛЖ ТВС С MIN DNBT			
+10JKS51FG902XQ0?	1	ПЛЖ ТВС С MAX Т ВЫХ ПО КНИТ			
+10JKS51FG906XQ0?	1	ПЛЖ ТВС С MIN ЗП ДП ЗН Т ВЫХ ПО КНИТ			
+10JKS53FG902XQ0?	1	ПЛЖ ТВС С MAX Т ВЫХ РАСЧ			
+10JKS54FG902XQ0?	1	ПЛЖ ТВС С MAX Т ВХ ТВС ПО КНИТ			
+10JKS55FG902XQ01	1	ПЛЖ ТВС С MAX Т ВХ РАСЧ			
+10JKS56FG902XQ0?	1	ПЛЖ ТВС С MAX DT ПО КНИТ			
+10JKS56FG906XQ0?	1	ПЛЖ ТВС С MIN ЗП ДП ЗН DT ПО КНИТ			
+10JKS58FG902XQ0?	1	ПЛЖ ТВС С MAX DT РАСЧ			
+10JKS82FG902XQ0?	1	ТВС С MAX ОТКЛ КОЭФ КАЛИБРОВКИ			
+10JKS83FG902XQ01	1	ПЛЖ ТВС С MAX ОТКЛ ВОССТ KQ ОТ KQ ИР			
+10JKS83FG904XQ01	1	ПЛЖ ТВС С MIN ОТКЛ ВОССТ KQ ОТ KQ ИР			
+10JKS84FG902XQ01	1	ПЛЖ MAX ОТКЛ ВОССТ KV ОТ KV ИР			
+10JKS84FG904XQ01	1	ПЛЖ MIN ОТКЛ ВОССТ KV ОТ KV ИР			
+10JKS85FG902XQ01	1	ПЛЖ ТВС С MAX KQ ИР			
+10JKS86FG902XQ01	1	ПЛЖ MAX KV ИР			
+10JKS87FG904XQ01	1	ПЛЖ ТВС С MIN DNBR			
+10JKS94FG902XQ01	1	ПЛЖ ТВС С MAX KR твэлов			
+10JKS95FG902XQ01	1	ПЛЖ ТВС С MAX KR твэгов			
+10JKS96FG902XQ01	1	ПЛЖ ТВС С MAX KR ПЕРИФ твэлов			
+10JKS07FX906XQ01	1	MIN ЗП ПО QVCAS			
+10JKS26FX906XH03	1	ПР ДП ЗН QL ТВЭГ ПЗ-1			
+10JKS26FX906XH04	1	ПР ДП ЗН QL ТВЭГ АЗ			
+10JKS26FX906XQ??	1	MIN ЗП ПО QL7LTVG			
+10JKS27FX906XH03	1	ПР ДП ЗН QL ПЕРИФ ТВЭЛ ПЗ-1			
+10JKS27FX906XH04	1	ПР ДП ЗН QL ПЕРИФ ТВЭЛ АЗ			
+10JKS27FX906XQ??	1	MIN ЗП ПО QL7L ПЕРИФ. ТВЭЛ			
+10JKS28FX906XH?2	1	ПР ДП ЗН DNBR ПЗ-2			
+10JKS28FX906XH?4	1	ПР ДП ЗН DNBR АЗ			
+10JKS28FX906XH?5	1	ПР ДП ЗН DNBR АЗ			
+10JKS94FX906XQ01	1	MIN ЗП ДП ЗН KR твэлов			
+10JKS95FX906XQ01	1	MIN ЗП ДП ЗН KR твэгов			
+10JKS96FX906XQ01	1	MIN ЗП ДП ЗН KR ПЕРИФ твэлов			
+10JKS28FX906XQ?2	1	MIN ЗП ПО DNBR7L			
+OFSTIR	1	Oфсет расч. по ИР			
+OFSTIREQ	1	Oфсет равновесный расч. по ИР 			
+10JKS42FX901XQ02	1	СРЕДНЕКВАДРАТИЧНОЕ ОТКЛ ПО МИД
+10JKS51FT902XQ01	1	MAX Т ВЫХ ПО КНИТ	°C		
+10JKS56FT902XQ01	1	MAX DT ТВС ПО КНИТ	°C		
+10JKS51FT906XQ01	1	MIN ЗП ДП ЗН Т ВЫХ ПО КНИТ	°C		

@@ -1,12 +1,14 @@
 from models import DetectorList
 
-from reader import create_reader
-import calculations
-
-
+from models import Reader, create_reader
+import calc_optimal_time
+import app_logger
+log = app_logger.get_logger(__name__)
+        
 class DetectorController():
 
     def __init__(self):
+        log.info('Create detector controller')
         # список датчиков
         self.allDetectors = DetectorList()
         # файлы из которых считаны данные
@@ -28,7 +30,7 @@ class DetectorController():
             isNewList - признак создания нового списка(удаление старых данных)
         '''
         # очистка данных в случае создания нового списка
-        print('START LOAD')
+        log.info('Начало загрузки данных в DetectorController')
         isNewList = isNewList or not self.readedFiles
         if isNewList:
             self.allDetectors.clear()
@@ -39,7 +41,7 @@ class DetectorController():
             self.readedFiles.append(fileName)
             reader = create_reader(fileName)
             if not reader:
-                print('Файл не найден')
+                log.warning('Файл не найден')
                 return
             self.allDetectors.extend(reader.read_file())
         # выбор текущего детектора
@@ -48,11 +50,12 @@ class DetectorController():
         self.update_current_min_max_date()
         if isNewList:
             self.reset_start_finish_date()
+        log.info('В DetectorController загружены данные')
 
     def update_current_detector(self, kks=''):
         '''Изменить текущий детектор на новый по kks,
         если за заданный промежуток нет данных, то сбросить время - ok'''
-        print('update_current_detector')
+        log.info(f'Обновление текущего датчика на {kks}')
         if kks == '':
             kks = self.currentDetector.get_kks()
         self.currentDetector = self.allDetectors.get_detector(kks)
@@ -63,15 +66,15 @@ class DetectorController():
         else:
             self.reset_start_finish_date()
         # выбор оптимального времени
-        self.minOptimalTime, self.maxOptimalTime = calculations.get_optimal_detector_time(self.currentDetector)
-        print('OPTIMAL ', self.minOptimalTime, self.maxOptimalTime)
+        self.minOptimalTime, self.maxOptimalTime = calc_optimal_time.get_optimal_detector_time(self.currentDetector)
         # Обновить дату и время
         self.update_date(self.currentDetector.get_start_date(), self.currentDetector.get_finish_date())
 
     def update_current_min_max_date(self):
-        """Обновить время выбранного интервала
         """
-        print('update_current_min_max_date')
+            Обновить время выбранного интервала
+        """
+        log.info(f'Обновление времени начала данных и окончания для датчика {self.currentDetector.get_kks()}')
         if self.currentDetector:
             self.minDate = self.currentDetector.get_start_date()
             self.maxDate = self.currentDetector.get_finish_date()
@@ -81,25 +84,25 @@ class DetectorController():
 
     # сброс времени и даты в экземпляре класса
     def reset_start_finish_date(self):
-        print('reset_start_finish_date')
+        log.info(f'Сбросить дату вырезки данных на весь период')
         self.startDate = self.minDate
         self.finishDate = self.maxDate
-        self.minOptimalTime, self.maxOptimalTime = calculations.get_optimal_detector_time(self.currentDetector)
+        self.minOptimalTime, self.maxOptimalTime = calc_optimal_time.get_optimal_detector_time(self.currentDetector)
 
     # обновление даты в экземпляре класса
     def update_date(self, startDate, finishDate):
-        print('update_date')
+        log.info(f'Обновить дату вырезки данных на {startDate} - {finishDate}')
         self.startDate = startDate
         self.finishDate = finishDate
 
     # автоматический выбор оптимального времени  для расчета
     def get_optimal_time(self):
-        return calculations.get_optimal_time(self.allDetectors, self.startDate, self.finishDate)
+        return calc_optimal_time.get_optimal_time(self.allDetectors, self.startDate, self.finishDate)
 
     # получить таблицу, каждаю строка состоит из KKS, статистика
     # статистика : {'mean' : self.mean, 'sko' : self.sko, 'error': self.error}
     def get_stats(self):
-        print('get stats')
+        log.info(f'Получение статистических данных для всех датчиков')
         res = []
         for kks in self.allDetectors.get_all_kks():
             detect = self.allDetectors.get_detector(kks, self.startDate, self.finishDate)

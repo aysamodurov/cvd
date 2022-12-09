@@ -92,7 +92,6 @@ class Detector():
         return self.indication_list[-1]
 
     def calc_statistic(self):
-        print('Calculation statistic for detector ', self.get_kks())
         values = self.get_value_list()
         self.mean = statUtils.calcMNKMean(values)
         self.sko = statUtils.calcSKO(values, self.mean)

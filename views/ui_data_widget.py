@@ -7,6 +7,10 @@ import re
 from views.ui_mini_canvas_widget import MiniCanvasWidget
 from models import MaDetector
 from models import SmoothDetector
+import app_logger
+
+log = app_logger.get_logger(__name__)
+
 
 
 class DataWidget(QtWidgets.QWidget):
@@ -85,7 +89,7 @@ class DataWidget(QtWidgets.QWidget):
     @QtCore.pyqtSlot()
     def on_clicked_open_file(self):
         '''Открыть файлы с данными, удалить старые данные'''
-        print('on_clicked_open_file')
+        log.info('Нажатие кнопки открыть файлы с данными')
         filesNames = QtWidgets.QFileDialog.getOpenFileNames(self, 'Open files')[0]
         if filesNames:
             self.open_files(filesNames, isNewList=True)
@@ -93,7 +97,7 @@ class DataWidget(QtWidgets.QWidget):
     @QtCore.pyqtSlot()
     def on_clicked_add_file(self):
         '''Добавить файлы с данными в имеющийя список'''
-        print('on_clicked_add_file')
+        log.info('Нажатие кнопки добавить файлы с данными')
         filesNames = QtWidgets.QFileDialog.getOpenFileNames(self, 'Open files')[0]
         if filesNames:
             self.open_files(filesNames, isNewList=False)
@@ -101,7 +105,7 @@ class DataWidget(QtWidgets.QWidget):
     @QtCore.pyqtSlot()
     def on_changed_item(self):
         '''Выбор другого датчика из списка'''
-        print('on_changed_item')
+        log.info('Изменение текущего датчика')
         # получаю kks
         if self.kksView.currentRow() != -1:
             current_kks = self.kksView.model().data(self.kksView.currentIndex())
@@ -112,7 +116,7 @@ class DataWidget(QtWidgets.QWidget):
     @QtCore.pyqtSlot()
     def on_change_datetime(self):
         '''перерисовка при изменении времени'''
-        print('on_change_datetime')
+        log.info('Изменение времени выборки')
         if self.changeDateTime:
             self.detectorController.update_date(self.startTimeEdit.dateTime().toPyDateTime(),
                                                 self.finishTimeEdit.dateTime().toPyDateTime())
@@ -123,8 +127,8 @@ class DataWidget(QtWidgets.QWidget):
     @QtCore.pyqtSlot()
     def changed_kks_mask(self):
         ''' Ввод данных в поле маска '''
-        print('changed_kks_mask')
         reg = self.kksFilterEdit.text().strip()
+        log.info(f'Ввод данных в поле маска {reg}')
         if reg == '':
             reg += '*'
         reg = (reg.replace('*', '.*') + '$').upper()
@@ -140,7 +144,7 @@ class DataWidget(QtWidgets.QWidget):
     @QtCore.pyqtSlot()
     def on_reset_time(self):
         '''сброс времени(отрисовка всех данных по датчику)'''
-        print('on_reset_time')
+        log.info('Сброс времени выборки')
         self.detectorController.reset_start_finish_date()
         self.detectorController.update_current_detector()
         self.update_date_time()
@@ -148,7 +152,7 @@ class DataWidget(QtWidgets.QWidget):
 
     @QtCore.pyqtSlot()
     def on_choose_optimal_time(self):
-        print('Выбор оптимального времени')
+        log.info('Выбор оптимального времени')
         # отображение анимации
         splashCalc = QtWidgets.QSplashScreen(QtGui.QPixmap(r"pic/loading.gif"))
         splashCalc.resize(200, 200)
@@ -167,8 +171,9 @@ class DataWidget(QtWidgets.QWidget):
     @QtCore.pyqtSlot()
     def on_calc_stats(self):
         if not self.detectorController.currentDetector:
+            log.warning(f'Не задан текущий датчик')
             return
-        print('Calc stat')
+        log.info('Вычисление статистических показателей')
         stats = self.detectorController.get_stats()
         self.parent.statTable.fill_table(stats)
         self.parent.tabWidget.setCurrentIndex(2)
@@ -210,7 +215,7 @@ class DataWidget(QtWidgets.QWidget):
     def open_files(self, filesNames, isNewList=False):
         '''загрузка файлов
         при загрузке отображается картинка Loading'''
-        print('open_files')
+        log.info(f'Обработка файлов {filesNames}')
         self.canvasWidget.clear()
         self.splash.show()
         QtWidgets.qApp.processEvents()
@@ -221,12 +226,11 @@ class DataWidget(QtWidgets.QWidget):
         self.update_kks_view()
         self.on_changed_item()
         self.parent.tabWidget.setCurrentIndex(0)
-        print('finish_open')
+        log.info(f'Файлы {filesNames} обработаны')
 
     def update_kks_view(self):
         ''' Обновление kksList
         удаляет старый и создает новый ListView'''
-        print('update_kks_view')
         self.kksView.clear()
         self.kksView.addItems(self.detectorController.allDetectors.get_all_kks())
         self.kksView.setCurrentRow(0)
@@ -234,7 +238,6 @@ class DataWidget(QtWidgets.QWidget):
 
     def update_date_time(self):
         '''обновить дату и время начала и окнчания данных'''
-        print('update_date_time')
         self.changeDateTime = False
         #         обновляем дату и время, за которые есть данные
         self.startTimeEdit.setMinimumDateTime(self.detectorController.minDate)
@@ -248,7 +251,7 @@ class DataWidget(QtWidgets.QWidget):
     #     сглаживание данных
     def on_smoothing(self):
         '''расчет с применением коэффициента сглаживания'''
-        print('on_smoothing')
+        log.info('Расчет с применением коэффициента сглаживания')
         koef, ok = QtWidgets.QInputDialog.getDouble(self, 'Сглаживание данных', 'Введите коэффициент сглаживания',
                                                     value=0.8, min=0.0, max=1.0, decimals=2)
         if ok:
@@ -260,7 +263,7 @@ class DataWidget(QtWidgets.QWidget):
 
     # подобрать коэффициент сглаживания по заданной допустимой погрешности
     def on_calc_smooth(self):
-        print('on_calc_smooth')
+        log.info('Подбор коэффициента сглаживания')
         awailableError, ok = QtWidgets.QInputDialog.getDouble(self, 'Подбор коэффициента сглаживания',
                                                               'Введите допустимую погрешность', value=0, decimals=3)
         if ok:
@@ -294,7 +297,7 @@ class DataWidget(QtWidgets.QWidget):
 
     def on_mooving_avarage(self):
         '''расчет с применением коскользящего среднего'''
-        print('on_mooving_avarage')
+        log.info('Расчет скользящего среднего')
         koef, ok = QtWidgets.QInputDialog.getInt(self, 'Скользящее среднее', 'Период скользящей средней',
                                                  value=10, min=2, max=100, step=1)
         if ok:
@@ -306,7 +309,7 @@ class DataWidget(QtWidgets.QWidget):
 
     def on_new_main_plotting(self):
         '''построение новых графиков в новом окне на вкладке график'''
-        print('on_new_main_plotting')
+        log.info('построение новых графиков в новом окне на вкладке график')
         self.parent.mainCanvas.clear()
 
         for ind in self.kksView.selectedIndexes():
@@ -317,7 +320,7 @@ class DataWidget(QtWidgets.QWidget):
 
     def on_add_main_plotting(self):
         '''добавление графика к существующим на вкладке график'''
-        print('on_add_main_plotting')
+        log.info('добавление графика к существующим на вкладке график')
         for ind in self.kksView.selectedIndexes():
             kks = self.kksView.model().data(ind)
             detector = self.detectorController.allDetectors.get_detector_by_kks(kks)

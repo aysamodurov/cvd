@@ -1,4 +1,4 @@
-
+import app_logger
 
 class Indication():
     """Класс описывающий показание датчика

@@ -71,7 +71,6 @@ class DetectorList(list):
                         else:
                             val = Indication(startTime, val.value, val.status)
                         res.add_indication(val)
-                        print(val)
                         startTime += delta
                 break
 

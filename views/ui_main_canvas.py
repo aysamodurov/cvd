@@ -8,6 +8,9 @@ from views.ui_navigation_toolbar import NavigationToolBar
 from matplotlib.figure import Figure, Axes
 import matplotlib.dates as dates
 import numpy as np
+import app_logger
+
+log = app_logger.get_logger(__name__)
 
 
 class Canvas(FigureCanvas):
@@ -24,6 +27,7 @@ class Canvas(FigureCanvas):
 
     # отрисовка графика по заданным x,y
     def plot_graph(self, detector):
+        log.info('отрисовка графика по заданным x,y')
         # AXIS LABEL
         alldates = detector.get_date_list()
 
@@ -65,6 +69,7 @@ class Canvas(FigureCanvas):
 
     # выбор оси из существующих или создание новой по значениям
     def get_Axes(self, data) -> Axes:
+        log.info('выбор оси из существующих или создание новой по значениям')
         data = np.array(data)
         data_min = data.min()
         data_max = data.max()
@@ -100,6 +105,7 @@ class Canvas(FigureCanvas):
 
 #     удаление всех графиков
     def clear_axes(self):
+        log.info('удаление всех графиков')
         for ax in self.axesList:
             ax.clear()
         self.axesList.clear()
@@ -125,7 +131,7 @@ class MainCanvasWidget(QtWidgets.QWidget):
         self.buttonDelete.clicked.connect(self.on_clicked_delete)
 
     def on_clicked_delete(self):
-        print('Delete')
+        log.info('Нажатие кнопки удалить график')
         if self.lines:
             _, line = self.lines.popitem()
             line.remove()
@@ -135,6 +141,7 @@ class MainCanvasWidget(QtWidgets.QWidget):
 
     # отрисовка графика
     def plot(self, detector):
+        log.info(f'Отрисовка графика {detector.get_kks()}')
         kks = detector.get_kks()
         if kks not in self.lines.keys():
             line = self.canvas.plot_graph(detector)
@@ -143,10 +150,12 @@ class MainCanvasWidget(QtWidgets.QWidget):
 
     # удаление всех графиков
     def clear(self):
+        log.info('Удаление всех графиков')
         self.lines.clear()
         self.canvas.clear_axes()
 
 #     рисование нового графика предварительно очистив оси
     def new_plot(self, detector):
+        log.info('Рисование нового графика предварительно очистив оси')
         self.clear()
         self.plot(detector)
