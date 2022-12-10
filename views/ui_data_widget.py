@@ -7,6 +7,8 @@ import re
 from views.ui_mini_canvas_widget import MiniCanvasWidget
 from models import MaDetector
 from models import SmoothDetector
+import config
+import os
 import logging
 
 log = logging.getLogger(__name__)
@@ -101,6 +103,19 @@ class DataWidget(QtWidgets.QWidget):
         filesNames = QtWidgets.QFileDialog.getOpenFileNames(self, 'Open files')[0]
         if filesNames:
             self.open_files(filesNames, isNewList=False)
+
+    @QtCore.pyqtSlot()
+    def on_clicked_change_info_file(self):
+        """
+        Изменить файл с информацией о датчиках
+        """
+        print('change info file')
+        file_path = QtWidgets.QFileDialog.getOpenFileName(self, 'Выбрать файл с информацией о датчиках')[0]
+        config_folder_name = os.path.dirname(file_path)
+        config_filename = os.path.basename(file_path)
+        config.write_value('detectorInfoFile', 'folderpath', config_folder_name)
+        config.write_value('detectorInfoFile', 'filename', config_filename)
+        log.info(f'Изменен файл с настроечной информацией о датчиках {file_path}')
 
     @QtCore.pyqtSlot()
     def on_changed_item(self):

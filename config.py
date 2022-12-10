@@ -28,10 +28,10 @@ encoding = windows-1251
 
 [logsFile]
 logfolder = logs
-        ''')
+''')
         print(f'Создан файл конфигурации {CONFIG_FILE_NAME}')
 
-    config.read(CONFIG_FILE_NAME)
+config.read(CONFIG_FILE_NAME)
 
 
 def read_value(section: str, const_name: str) -> str:

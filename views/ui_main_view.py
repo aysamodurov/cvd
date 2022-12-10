@@ -38,9 +38,12 @@ class MyMainWindow(QtWidgets.QMainWindow):
         openAction.triggered.connect(self.dataWidget.on_clicked_open_file)
         addAction = QtWidgets.QAction('Добавить файл', self)
         addAction.triggered.connect(self.dataWidget.on_clicked_add_file)
+        changeInfoFileAction = QtWidgets.QAction('Выбрать файл с информацией о датчиках', self)
+        changeInfoFileAction.triggered.connect(self.dataWidget.on_clicked_change_info_file)
         closeAction = QtWidgets.QAction('Закрыть', self)
         closeAction.triggered.connect(QtWidgets.qApp.quit)
 
         fileMenu.addAction(openAction)
         fileMenu.addAction(addAction)
+        fileMenu.addAction(changeInfoFileAction)
         fileMenu.addAction(closeAction)
