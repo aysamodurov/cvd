@@ -9,11 +9,12 @@
     если значение отсутствует значит False
     SystematicError - систематическая погрешность
 """
-import configparser
 import logging
 import re
+import config
 
 log = logging.getLogger(__name__)
+
 
 class DetectorsInfo:
 
@@ -79,11 +80,9 @@ class DetectorsInfo:
             filepath(str): путь к файлу с описанием датчиков
             encoding (str): кодировка
         """
-        config = configparser.ConfigParser()
-        config.read('config/settings.ini')
-        folderpath = config['detectorInfoFile']['folderpath']
-        filename = config['detectorInfoFile']['filename']
+
+        folderpath = config.read_value('detectorInfoFile', 'folderpath')
+        filename = config.read_value('detectorInfoFile', 'filename')
         filepath = f'{folderpath}/{filename}'
-        encoding = config['detectorInfoFile']['encoding']
+        encoding = config.read_value('detectorInfoFile', 'encoding')
         return filepath, encoding
-    

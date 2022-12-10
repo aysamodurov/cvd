@@ -3,7 +3,7 @@
 """
 import logging
 import os
-import configparser
+import config
 
 
 _log_format = f"%(asctime)s - [%(levelname)s] - %(name)s - (%(filename)s).%(funcName)s(%(lineno)d) - %(message)s"
@@ -42,9 +42,7 @@ def init_logs_folder():
         Returns:
             str: Путь к директории для логгирования
     """
-    config = configparser.ConfigParser()
-    config.read('config/settings.ini')
-    log_foldername = config['logsFile']['logFolder']
+    log_foldername = config.read_value('logsFile', 'logFolder')
     if not os.path.exists(log_foldername):
         os.mkdir(log_foldername)
     return log_foldername

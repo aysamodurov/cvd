@@ -7,6 +7,9 @@ detectors_info = DetectorsInfo()
 detectors_info.load_from_file()
 
 
-
-info = detectors_info.get_info('10JKS28FG906XQ01')
-print(info)
+import config
+folder_name = config.read_value('detectorInfofsdFile', 'folderpath')
+print(folder_name)
+config.write_value('detectorInfoFile', 'folderpath', 'config1')
+# folder_name = config.read_value('detectorInfoFile', 'folderpath')
+# print(folder_name)
