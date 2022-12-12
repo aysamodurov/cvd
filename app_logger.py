@@ -18,7 +18,7 @@ def get_file_handler():
         _type_: file_handler
     """
     log_foldername = init_logs_folder()
-    current_time = f'{datetime.datetime.now():{"%Y-%m-%d_%H:%M:%S"}}'
+    current_time = f'{datetime.datetime.now():{"%Y-%m-%d_%H-%M-%S"}}'
     file_handler = logging.FileHandler(f"{log_foldername}/{__name__}_{current_time}.log")
     file_handler.setLevel(logging.INFO)
     file_handler.setFormatter(logging.Formatter(_log_format))
