@@ -28,6 +28,7 @@ def get_optimal_detector_time(detector, times=60):
     dtList = detector.get_date_list()
     return (dtList[optimal_pos], dtList[optimal_pos + times])
 
+
 def get_optimal_time(detectorList, startDate, finishDate, times=60):
     '''
     Выбор времени для обработки
@@ -38,7 +39,7 @@ def get_optimal_time(detectorList, startDate, finishDate, times=60):
     times - количество точек, которые необходимо выбрать
     return дата начала и окончания промежутка с оптимальными для данных временами
     '''
-    log.info(f'Выбор времени для обработки с минимальной скорость и случайной погрешностью для всех датчиков')
+    log.info('Выбор времени для обработки с минимальной скорость и случайной погрешностью для всех датчиков')
     if startDate > finishDate - timedelta(seconds=times):
         return None, None
     valueList = []
@@ -47,8 +48,8 @@ def get_optimal_time(detectorList, startDate, finishDate, times=60):
         valueList.append(np.array(detector.get_value_list()))
     optimal_pos = 0
     min_sko = -1
-    #поиск участка данных с минимальным СКО/maxValue
-    #оцениваются все датчкики, ищем минимальную сумму СКО/maxValue значение датчика
+    # поиск участка данных с минимальным СКО/maxValue
+    # оцениваются все датчкики, ищем минимальную сумму СКО/maxValue значение датчика
     for i in range(1, len(valueList[0]) - times):
         sko = 0
         for value in valueList:

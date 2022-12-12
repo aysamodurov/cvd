@@ -62,7 +62,7 @@ def write_value(section: str, const_name: str, value: str):
         section (str): Секция
         const_name (str): Название константы
         value (str): Значение константы
-    """   
+    """
     config[section][const_name] = value
     with open(CONFIG_FILE_NAME, 'w') as config_file:
         config.write(config_file)

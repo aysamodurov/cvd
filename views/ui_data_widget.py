@@ -14,7 +14,6 @@ import logging
 log = logging.getLogger(__name__)
 
 
-
 class DataWidget(QtWidgets.QWidget):
     '''
         Виджет для отображения в первой вкладке приложения

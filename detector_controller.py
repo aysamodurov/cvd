@@ -1,12 +1,12 @@
 from models import DetectorList
 
-from models import Reader, create_reader
+from models import create_reader
 import calc_optimal_time
 import logging
 
 log = logging.getLogger(__name__)
 
-      
+
 class DetectorController():
 
     def __init__(self):
@@ -104,7 +104,7 @@ class DetectorController():
     # получить таблицу, каждаю строка состоит из KKS, статистика
     # статистика : {'mean' : self.mean, 'sko' : self.sko, 'error': self.error}
     def get_stats(self):
-        log.info(f'Получение статистических данных для всех датчиков')
+        log.info('Получение статистических данных для всех датчиков')
         res = []
         for kks in self.allDetectors.get_all_kks():
             detect = self.allDetectors.get_detector(kks, self.startDate, self.finishDate)

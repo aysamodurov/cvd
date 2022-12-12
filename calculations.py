@@ -4,6 +4,7 @@ import logging
 
 log = logging.getLogger(__name__)
 
+
 def get_optimal_detector_time(detector, times=60):
     '''
         Выбор времени для обработки
@@ -45,8 +46,8 @@ def get_optimal_time(detectorList, startDate, finishDate, times=60):
         valueList.append(np.array(detector.get_value_list()))
     optimal_pos = 0
     min_sko = -1
-    #поиск участка данных с минимальным СКО/maxValue
-    #оцениваются все датчкики, ищем минимальную сумму СКО/maxValue значение датчика
+    # поиск участка данных с минимальным СКО/maxValue
+    # оцениваются все датчкики, ищем минимальную сумму СКО/maxValue значение датчика
     for i in range(1, len(valueList[0]) - times):
         sko = 0
         for value in valueList:

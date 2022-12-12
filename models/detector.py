@@ -1,5 +1,6 @@
 import copy
 import models.statistic_utils as statUtils
+from models.detectors_info import DetectorsInfo
 
 
 class Detector():
@@ -17,7 +18,8 @@ class Detector():
             error - СКО * Коэффициент Стьюдента
         '''
         self.kks = kks
-        self.description = description
+        detectors_info = DetectorsInfo()
+        self.description = detectors_info.get_info(kks)
         self.indication_list = list()
         self.mean = 0
         self.sko = 0

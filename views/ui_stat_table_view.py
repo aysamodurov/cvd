@@ -49,7 +49,7 @@ class StatisticTableWidget(QtWidgets.QWidget):
             rowPos = self.table.rowCount()
             self.table.insertRow(rowPos)
             self.table.setItem(rowPos, 0, QtWidgets.QTableWidgetItem(stat[0])) # KKS
-            self.table.setItem(rowPos, 1, QtWidgets.QTableWidgetItem('{:2.5f}'.format(stat[1]['mean']))) # mean
-            self.table.setItem(rowPos, 2, QtWidgets.QTableWidgetItem('{:2.5f}'.format(stat[1]['sko']))) # SKO
+            self.table.setItem(rowPos, 1, QtWidgets.QTableWidgetItem('{:2.5f}'.format(stat[1]['mean']))) #  mean
+            self.table.setItem(rowPos, 2, QtWidgets.QTableWidgetItem('{:2.5f}'.format(stat[1]['sko'])))  #  SKO
             self.table.setItem(rowPos, 3, QtWidgets.QTableWidgetItem('{:2.5f}'.format(stat[1]['error'])))
             self.table.resizeColumnsToContents()
