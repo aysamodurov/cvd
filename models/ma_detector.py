@@ -13,8 +13,8 @@ class MaDetector(Detector):
         '''
 
         newKks = '{}_ma_{}'.format(detect.get_kks(), koef_ma)
-        newDesc = '{} with ma {}'.format(detect.get_description(), koef_ma)
-        super().__init__(newKks, newDesc)
+        newDesc = '{} with ma {}'.format(detect.get_name(), koef_ma)
+        super().__init__(newKks)
         sumList = list()
         for i, d in enumerate(detect.get_indication_list()):
             if i < koef_ma:

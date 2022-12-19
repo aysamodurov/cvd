@@ -3,6 +3,9 @@ from models import DetectorList
 from models import create_reader
 import calc_optimal_time
 import logging
+from models.detectors_info import DetectorsInfo
+from models.utils import formatting_number
+import config
 
 log = logging.getLogger(__name__)
 
@@ -55,8 +58,10 @@ class DetectorController():
         log.info('В DetectorController загружены данные')
 
     def update_current_detector(self, kks=''):
-        '''Изменить текущий детектор на новый по kks,
-        если за заданный промежуток нет данных, то сбросить время - ok'''
+        '''
+            Изменить текущий детектор на новый по kks,
+            если за заданный промежуток нет данных, то сбросить время - ok
+        '''
         log.info(f'Обновление текущего датчика на {kks}')
         if kks == '':
             kks = self.currentDetector.get_kks()
@@ -101,15 +106,70 @@ class DetectorController():
     def get_optimal_time(self):
         return calc_optimal_time.get_optimal_time(self.allDetectors, self.startDate, self.finishDate)
 
-    # получить таблицу, каждаю строка состоит из KKS, статистика
-    # статистика : {'mean' : self.mean, 'sko' : self.sko, 'error': self.error}
-    def get_stats(self):
+    def get_statistic_table_headers(self):
+        '''
+        Возвращает строку для заголовка таблицы
+        Сами строки формируются в методе get_statisctic_table_rows
+
+        Returns
+        -------
+        list
+            Строка заговолков таблицы
+
+        '''
+        return ["KKS", "Назвнание", "Ед.изм.", "Среднее значение", "СКО", 
+                "Погрешность", "Выброс, %", "Скорость", "Кол-во значений"]
+    
+    def get_statisctic_table_rows(self):
+        '''
+        получить отформатированные строки для отображения в таблице
+
+        Returns
+        -------
+            [
+            kks, name, munit, mean, sko, error, outfilter, count_value    
+            ]
+            Каждое поле (значение, признак достоверности)
+        '''
         log.info('Получение статистических данных для всех датчиков')
         res = []
         for kks in self.allDetectors.get_all_kks():
             detect = self.allDetectors.get_detector(kks, self.startDate, self.finishDate)
-            res.append([detect.get_kks(), detect.get_statistic()])
+            statisctic_row = []
+            statisctic_row.append((detect.get_kks(),   True))
+            statisctic_row.append((detect.get_name(),  True))
+            statisctic_row.append((detect.get_munit(), True))
+            
+            statistic = detect.calculate_statistic()
+
+            
+            statisctic_row.append((formatting_number(statistic['mean']), True))
+            statisctic_row.append((formatting_number(statistic['sko']), True))
+            
+            is_reliable_error = statistic['error'] < detect.get_delta() or detect.get_delta() == 0 
+            try:
+                max_outliers_percent = int(config.read_value('formatting', 'max_outliers_percent', 10))
+            except ValueError:
+                max_outliers_percent = 10
+                
+            statisctic_row.append((formatting_number(statistic['error']), is_reliable_error))
+            statisctic_row.append((formatting_number(statistic['outliers_percent'],2), statistic['outliers_percent']<max_outliers_percent))
+            statisctic_row.append((formatting_number(statistic['rate_of_change']), True))
+            
+            statisctic_row.append((formatting_number(detect.count(), 0), True))
+                                    
+            res.append(statisctic_row)
         return res
+    
+    def update_all_description(self):
+        '''
+            Обновить описание всех датчиков
+        '''
+        log.info('Обновление информации о датчиках')
+        detectors_info = DetectorsInfo()
+        detectors_info.load_from_file()
+        self.allDetectors.update_all_description()
+        log.info('Обновлена информации о датчиках')
 
     def get_current_detector(self):
         """Вернуть текущий датчик

@@ -11,7 +11,7 @@
 """
 import re
 import config
-from singleton_decorator import singleton
+from models.utils import singleton
 import logging
 
 log = logging.getLogger(__name__)
@@ -108,7 +108,14 @@ class DetectorsInfo:
         for info in self.all_info:
             if re.match(info['mask'], kks):
                 return info
-        return None
+        return {
+                'mask': '',
+                'delta': 0,
+                'name': '',
+                'munit': '',
+                'discrete': 0,
+                'systematic_error': 0
+            }
 
     def _get_filepath_from_setting(self):
         """
@@ -122,5 +129,5 @@ class DetectorsInfo:
         folderpath = config.read_value('detectorInfoFile', 'folderpath')
         filename = config.read_value('detectorInfoFile', 'filename')
         filepath = f'{folderpath}/{filename}'
-        encoding = config.read_value('detectorInfoFile', 'encoding')
+        encoding = config.read_value('detectorInfoFile', 'encoding', 'utf-8')
         return filepath, encoding

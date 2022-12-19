@@ -8,6 +8,7 @@ from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as Navigatio
 from matplotlib.figure import Figure, Axes
 import matplotlib.dates as dates
 import logging
+from models.utils import formatting_number
 
 log = logging.getLogger(__name__)
 
@@ -78,13 +79,12 @@ class MiniCanvasWidget(QtWidgets.QWidget):
     def plot(self, detector, minOptimalTime=None, maxOptimalTime=None):
         log.info(f'Отрисовка графика {detector.get_kks()}')
         # расчет статистики для датчика
-        stat = detector.get_statistic()
+        stat = detector.calculate_statistic()
         lbl = ''
-        prec = 4-len(str(int(stat['mean'])))
-        if prec < 0:
-            prec = 0
-        for name, val in stat.items():
-            lbl += '{} : {:{width}.{pr}f}\n'.format(name, val,  width=3, pr=prec)
+        names = ['Среднее', 'СКО', 'Погрешность']
+        for name, val in zip(names, stat.values()):
+            lbl += '{:<11} : {}\n'.format(name, formatting_number(val))
+            
         self.canvas.plot_graph(detector.get_date_list(), detector.get_value_list(), lbl)
         # отрисовка вертикальных линий,
         # которые выделяют рекомедуемое для расчета время

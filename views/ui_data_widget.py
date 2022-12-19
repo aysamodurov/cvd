@@ -108,13 +108,15 @@ class DataWidget(QtWidgets.QWidget):
         """
         Изменить файл с информацией о датчиках
         """
-        print('change info file')
+        log.info('Изменение файла с информацией о датчиках')
         file_path = QtWidgets.QFileDialog.getOpenFileName(self, 'Выбрать файл с информацией о датчиках')[0]
-        config_folder_name = os.path.dirname(file_path)
-        config_filename = os.path.basename(file_path)
-        config.write_value('detectorInfoFile', 'folderpath', config_folder_name)
-        config.write_value('detectorInfoFile', 'filename', config_filename)
-        log.info(f'Изменен файл с настроечной информацией о датчиках {file_path}')
+        if file_path:
+            config_folder_name = os.path.dirname(file_path)
+            config_filename = os.path.basename(file_path)
+            config.write_value('detectorInfoFile', 'folderpath', config_folder_name)
+            config.write_value('detectorInfoFile', 'filename', config_filename)
+            log.info(f'Изменен файл с настроечной информацией о датчиках {file_path}')
+            self.detectorController.update_all_description()
 
     @QtCore.pyqtSlot()
     def on_changed_item(self):
@@ -188,8 +190,8 @@ class DataWidget(QtWidgets.QWidget):
             log.warning(f'Не задан текущий датчик')
             return
         log.info('Вычисление статистических показателей')
-        stats = self.detectorController.get_stats()
-        self.parent.statTable.fill_table(stats)
+        rows = self.detectorController.get_statisctic_table_rows()
+        self.parent.statTable.fill_table(rows)
         self.parent.tabWidget.setCurrentIndex(2)
 
     # DRAG AND DROP
@@ -288,7 +290,7 @@ class DataWidget(QtWidgets.QWidget):
             while kSmooth > 0:
                 kSmooth = round(kSmooth, 2)
                 smDetector = SmoothDetector(self.detectorController.currentDetector, kSmooth)
-                if smDetector.get_statistic()['error'] < awailableError:
+                if smDetector.calculate_statistic()['error'] < awailableError:
                     break
                 kSmooth -= 0.05
             # вывод результатов

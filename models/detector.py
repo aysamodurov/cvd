@@ -9,22 +9,21 @@ class Detector():
         kks - kks датчика
         indications - список из Indication(датаи время, значение, статус)
     '''
+    detectors_info = DetectorsInfo()
 
-    def __init__(self, kks, description=''):
+    def __init__(self, kks, descr = '', munit = ''):
         '''
             KKS датчика, массив значений типа Indication,
+            description: описание, загруженное из файла из диагностики
             mean - среднее значение
             sko - СКО
             error - СКО * Коэффициент Стьюдента
         '''
         self.kks = kks
-        detectors_info = DetectorsInfo()
-        self.description = detectors_info.get_info(kks)
+        self.description = {}
+        self.load_description(descr, munit)
         self.indication_list = list()
-        self.mean = 0
-        self.sko = 0
-        self.error = 0
-
+        
     def add_indication(self, indication):
         ''' добавить одно значение типа Indication
             предварительно проверив есть ли за данное время данные
@@ -50,6 +49,16 @@ class Detector():
             for newIndication in detector2.get_indication_list():
                 self.add_indication(newIndication)
             self.sort_indication_list()
+    
+    def load_description(self, descr='', munit=''):
+        '''
+            Загрузить описание из DetectorsInfo
+        '''
+        self.description = self.detectors_info.get_info(self.kks)
+        if self.description['name']  == '' and descr:
+            self.description['name'] = descr
+        if self.description['munit']  == '' and munit:
+            self.description['munit'] = munit
 
     def sort_indication_list(self, reverse=False):
         """Сортировка массива с показаниями Indication
@@ -72,7 +81,7 @@ class Detector():
     def __lt__(self, other):
         '''сравнение 2 значений'''
         return self.kks < other.kks
-
+    
     def copy(self):
         '''скопировать объект'''
         return copy.deepcopy(self)
@@ -81,7 +90,7 @@ class Detector():
         ''' скопировать indication_list'''
         return copy.deepcopy(self.indication_list)
 
-    def get_value_by_time(self, dt):
+    def get_indication_by_time(self, dt):
         '''получить значение во время dt
         или ближайшее которое было до него
         Return:
@@ -92,21 +101,48 @@ class Detector():
             if val.dt >= dt:
                 return val
         return self.indication_list[-1]
-
-    def calc_statistic(self):
+    
+    def calculate_statistic(self):
+        '''
+        возвращает массив со статистикой
+        Result:
+            'mean': Среднее значение
+            'sko': СКО
+            'error': погрешность
+            'outliers_percent': процент выбросов
+            'rate_of_change': скорость изменения параметра
+        '''
         values = self.get_value_list()
-        self.mean = statUtils.calcMNKMean(values)
-        self.sko = statUtils.calcSKO(values, self.mean)
-        self.error = statUtils.calcError(self.sko, len(values))
+        mean = statUtils.calcMNKMean(values)
+        sko = statUtils.calcSKO(values, mean)
+        error = statUtils.calcError(sko, len(values))
+        outliers_percent = statUtils.calc_outliers(self.get_value_list(), self.description['delta'], mean)
+        rate_of_change = statUtils.calc_rate_of_change(values)
+        
+        return {
+                'mean': mean,
+                'sko': sko,
+                'error': error,
+                'outliers_percent': outliers_percent,
+                'rate_of_change': rate_of_change
+            }
 
     # GETTERS
     def get_kks(self):
         '''возвращает kks датчика'''
         return self.kks
 
-    def get_description(self):
+    def get_name(self):
         '''возвращает описание датчика'''
-        return self.description
+        if self.description['name']:
+            return self.description['name']
+        return ''
+    
+    def get_munit(self):
+        '''возвращает описание датчика'''
+        if self.description['munit']:
+            return self.description['munit']
+        return ''
 
     def get_indication_list(self):
         '''возвращает массив indications'''
@@ -119,6 +155,10 @@ class Detector():
     def get_value_list(self):
         '''возвращает массив значений показаний'''
         return [val.value for val in self.indication_list]
+    
+    def get_true_value_list(self):
+        '''возвращает массив достоверных занчений значений показаний'''
+        return [val.value for val in self.indication_list if val.status != 7]
 
     def get_status_list(self):
         ''' возвращает массив значений cтатуса'''
@@ -131,9 +171,11 @@ class Detector():
     def get_finish_date(self):
         '''возвращает дату и время окончания данных'''
         return self.get_date_list()[-1]
-
-    def get_statistic(self):
-        '''возвращает массив со статистикой'''
-        self.calc_statistic()
-        return {'mean': self.mean, 'sko': self.sko, 'error': self.error}
+    
+    def get_delta(self):
+        '''возвращает допустимую погрешность'''
+        if 'delta' in self.description:
+            return self.description['delta']
+        else:
+            return 0
     # END GETERS

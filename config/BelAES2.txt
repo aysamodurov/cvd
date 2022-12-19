@@ -1,5 +1,5 @@
-KKS (Mask KKS)*	Delta*	Name	Munit	Discrete(NULL or any_value)	SystematicError
-1?JEC?1CT8??XQ01	0.5a	T ÃÍ	°C		0.5
+﻿KKS (Mask KKS)*	Delta*	Name	Munit	Discrete(NULL or any_value)	SystematicError
+1?JEC?1CT8??XQ01	0.5	hello	°C		0.5
 1?JEC?3CT8??XQ01	0.5	T ÕÍ	°C		0.5
 10JAA??CT8?1XQ01	1	ÒÏ-3	°C		1
 10JAA??CT8?2XQ01	1	ÒÏ-1À	°C		1
@@ -21,7 +21,7 @@ KKS (Mask KKS)*	Delta*	Name	Munit	Discrete(NULL or any_value)	SystematicError
 10LAB?0FT001XQ01	1	Ò íàñ â ÏÃ	°C		
 10LAB?0FT002XQ01	1	Tíàñ 1ê - Ò íàñ 2ê	°C		
 10JEC?1FT901XQ03	1	 çàï äî Òíàñ	°C		
-10JEC?0CP8?2XQ62	0.006	dP ÃÖÍÀ	ÌÏà		
+10JEC?0CP8?2XQ62	0.01	myname		
 10BB?00CE8??XQ62	0.07	×àñò ïèò ÃÖÍÀ	Ãö		
 10JAA10CP8??XQ62	0.15	P íàä ÀêÇ	ÌÏà		
 10JEB?0CE8??XQ62	100	N ÃÖÍÀ	êÂò			

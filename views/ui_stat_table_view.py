@@ -1,5 +1,6 @@
 '''вкладка Статистика'''
 from PyQt5 import QtWidgets, QtCore
+from PyQt5.QtGui import QColor
 import logging
 
 log = logging.getLogger(__name__)
@@ -11,11 +12,13 @@ class StatisticTableWidget(QtWidgets.QWidget):
         super().__init__(parent)
         self.detectorController = detectorController
         vbox = QtWidgets.QVBoxLayout()
+        
         # таблица для отображения статистики
+        self.column_names = detectorController.get_statistic_table_headers()
         self.table = QtWidgets.QTableWidget(self)
-        self.table.setColumnCount(4)
+        self.table.setColumnCount(len(self.column_names))
         self.table.setRowCount(0)
-        self.table.setHorizontalHeaderLabels(["KKS", "Среднее значение", "СКО", "Погрешность"])
+        self.table.setHorizontalHeaderLabels(self.column_names)
         self.table.resizeColumnsToContents()
 
         # кнопка скопировать статистику
@@ -28,28 +31,28 @@ class StatisticTableWidget(QtWidgets.QWidget):
 
     @QtCore.pyqtSlot()
     def copy_stat(self):
-        log.info('Отображение статистики')
-        res = 'KKS\tСреднее\tСКО\tПогрешность\n'
-        for i in range(0, self.table.rowCount()):
-            kks = self.table.model().index(i, 0).data()
-            mean = self.table.model().index(i, 1).data()
-            sko = self.table.model().index(i, 2).data()
-            error = self.table.model().index(i, 3).data()
-            res = '{}{}\t{}\t{}\t{}\n'.format(res, kks, mean, sko, error)
+        log.info('Копирование таблицы со статистикой в буфер обмена')
+        res = '\t'.join(self.column_names) + '\n'
+        
+        for row in range(self.table.rowCount()):
+            row_values = [self.table.item(row, column).text().strip() for column in range(self.table.columnCount())]
+            res += '\t'.join(row_values) + '\n'
         QtWidgets.QApplication.clipboard().setText(res)
 
     # заполнение таблицы
-    # stats-[kks, {'mean' : self.mean, 'sko' : self.sko, 'error': self.error}]
-    def fill_table(self, stats):
+    def fill_table(self, rows):
         log.info('Заполнение таблицы со статистикой')
+        
+        # столбец с выбросами 
+        
         # очищаю таблицу отстарых дынных
         self.table.setRowCount(0)
-        # заполняю построчно таблицу
-        for stat in stats:
-            rowPos = self.table.rowCount()
-            self.table.insertRow(rowPos)
-            self.table.setItem(rowPos, 0, QtWidgets.QTableWidgetItem(stat[0])) # KKS
-            self.table.setItem(rowPos, 1, QtWidgets.QTableWidgetItem('{:2.5f}'.format(stat[1]['mean']))) #  mean
-            self.table.setItem(rowPos, 2, QtWidgets.QTableWidgetItem('{:2.5f}'.format(stat[1]['sko'])))  #  SKO
-            self.table.setItem(rowPos, 3, QtWidgets.QTableWidgetItem('{:2.5f}'.format(stat[1]['error'])))
+        for row in rows:
+            number_new_row = self.table.rowCount()
+            self.table.insertRow(number_new_row)
+            for number_column, value in enumerate(row):
+                self.table.setItem(number_new_row, number_column, QtWidgets.QTableWidgetItem(value[0]))
+                if not value[1]:
+                    self.table.item(number_new_row, number_column).setBackground(QColor(255,0,0))
             self.table.resizeColumnsToContents()
+        

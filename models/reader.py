@@ -181,26 +181,32 @@ class SVBUFixedReader(Reader):
        
         detector_list = DetectorList()
         with open(self.file_name, encoding='utf-8') as file:
+            
             for line in file:
                 values = line.split('\t')
                 # Проверка, если строка начинается с даты,
                 # то это строка с данными
                 if (values[0].split('.')[0]).isdigit():
                     dt = datetime.datetime.strptime(values[0], '%d.%m.%y %H:%M:%S')
+                    values[0] = ''
 #                 считываем значения
                 if (values[0] == ''):
                     try:
                         kks = values[1]
+                        
                         value = 0
-                        status = 7
                         if is_float(values[2]):
                             value = float(values[2])
+                        
                         # проверка на достоверность 7 - недост, 0 - дост
-                            if values[4] == 'дост':
-                                status = 0
+                        status = 7
+                        if values[4] == 'дост':
+                            status = 0
+                            
                         desc = values[5]
+                        munit = values[3]
     #                     добавление нового датчика
-                        detect = Detector(kks, desc)
+                        detect = Detector(kks, desc, munit)
                         indication = Indication(dt, value, status)
                         detect.add_indication(indication)
                         detector_list.insert(detect)

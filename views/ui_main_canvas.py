@@ -47,12 +47,10 @@ class Canvas(FigureCanvas):
         ax.set_xlabel(xlabel, weight='bold', fontsize=13)
 
         # YLABEL
-        ax.set_ylabel(detector.get_description(), weight='bold', fontsize=13)
+        ax.set_ylabel(detector.get_name(), weight='bold', fontsize=13)
 
         # LABEL
-        lbl = '{} {}'.format(detector.get_kks(), detector.get_description())
-        if detector.get_description():
-            lbl = '{} - {}'.format(lbl, detector.get_description())
+        lbl = '{} {}'.format(detector.get_kks(), detector.get_name())
 
         # отрисовка линии если данные состоят из нескольких точек
         # или точки если в данных только одно значение

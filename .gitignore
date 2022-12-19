@@ -2,6 +2,6 @@ venv/
 logs/
 .vscode/
 .idea/
-**/__pycache__/
+*/__pycache__/
 test.py
 mpl.py

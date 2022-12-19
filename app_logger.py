@@ -18,7 +18,7 @@ def get_file_handler():
         _type_: file_handler
     """
     log_foldername = init_logs_folder()
-    current_time = f'{datetime.datetime.now():{"%Y-%m-%d_%H-%M-%S"}}'
+    current_time = f'{datetime.datetime.now():{"%Y-%m-%d"}}'
     file_handler = logging.FileHandler(f"{log_foldername}/{__name__}_{current_time}.log")
     file_handler.setLevel(logging.INFO)
     file_handler.setFormatter(logging.Formatter(_log_format))
@@ -48,7 +48,7 @@ def init_logs_folder():
         Returns:
             str: Путь к директории для логгирования
     """
-    log_foldername = config.read_value('logsFile', 'logFolder')
+    log_foldername = config.read_value('logsFile', 'logFolder', 'logs')
     if not os.path.exists(log_foldername):
         os.mkdir(log_foldername)
     return log_foldername

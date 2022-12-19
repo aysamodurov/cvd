@@ -81,3 +81,54 @@ def getCoefStudent(f):
             return kSudentList[i]
     # если количество степеней свободы больше 600
     return kSudentList[-1]
+
+
+def calc_outliers(values, delta, mean = 0):
+    '''
+    Расчет количество выбросов
+
+    Parameters
+    ----------
+    values : Список значений 
+    delta : Допустимая погрешность
+    mean : Среднее значение спсика
+
+    Returns
+    -------
+    float
+        Процент выбросов (резко выделяющихся значений)
+
+    '''
+    if mean == 0:
+        mean = calcMNKMean(values)
+    
+    if delta == 0:
+        return 0
+   
+    res = 0
+    max_delta = 2 * delta
+    for val in values:
+        if abs(val - mean) > max_delta:
+            res += 1
+    try:
+        res = 100 * res / len(values)
+    except ZeroDivisionError:
+        res = 0
+    return res
+
+
+def calc_rate_of_change(values):
+    '''
+    Расчет скорости изменения параметра
+
+    Parameters
+    ----------
+    values : Список значений 
+
+    Returns
+    -------
+    res (float): Скорость изменения параметра 
+
+    '''
+    res, _ = calcMNK(values)
+    return 3600 * res
