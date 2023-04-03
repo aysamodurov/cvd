@@ -4,7 +4,6 @@ View вкладки График
 '''
 from PyQt5 import QtWidgets
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
-from views.ui_navigation_toolbar import NavigationToolBar
 from matplotlib.figure import Figure, Axes
 import matplotlib.dates as dates
 import numpy as np
@@ -15,19 +14,19 @@ log = logging.getLogger(__name__)
 
 class Canvas(FigureCanvas):
     '''
-    отрисовка графиков
+    отрисовка графиков во вкладке "график"
     '''
     axesList = list()
     same_koef = 0.2
 
     def __init__(self, parent=None):
-        self.fig = Figure()
+        self.fig: Figure = Figure()
         self.canvas = FigureCanvas.__init__(self, self.fig)
         self.setParent(parent)
 
     # отрисовка графика по заданным x,y
     def plot_graph(self, detector):
-        log.info('отрисовка графика по заданным x,y')
+        log.info('отрисовка графика по заданным x,y во вкладке "график"')
         # AXIS LABEL
         alldates = detector.get_date_list()
 
@@ -89,6 +88,7 @@ class Canvas(FigureCanvas):
             ax.grid(b=True)
         else:
             ax = self.axesList[0].twinx()
+
             ax._get_lines.prop_cycler = self.axesList[0]._get_lines.prop_cycler
         self.axesList.append(ax)
         if len(self.axesList) > 2:
@@ -105,6 +105,7 @@ class Canvas(FigureCanvas):
     def clear_axes(self):
         log.info('удаление всех графиков')
         for ax in self.axesList:
+            ax.cla()
             ax.clear()
         self.axesList.clear()
         self.draw()
@@ -120,10 +121,8 @@ class MainCanvasWidget(QtWidgets.QWidget):
         super().__init__(parent)
         vbox = QtWidgets.QVBoxLayout()
         self.canvas = Canvas(self)
-        self.navigation = NavigationToolBar(self.canvas, self)
         self.buttonDelete = QtWidgets.QPushButton('Delete')
         vbox.addWidget(self.canvas, 1)
-        vbox.addWidget(self.navigation, 1)
         vbox.addWidget(self.buttonDelete)
         self.setLayout(vbox)
         self.buttonDelete.clicked.connect(self.on_clicked_delete)

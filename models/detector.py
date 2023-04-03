@@ -11,7 +11,7 @@ class Detector():
     '''
     detectors_info = DetectorsInfo()
 
-    def __init__(self, kks, descr = '', munit = ''):
+    def __init__(self, kks, descr='', munit=''):
         '''
             KKS датчика, массив значений типа Indication,
             description: описание, загруженное из файла из диагностики
@@ -23,7 +23,7 @@ class Detector():
         self.description = {}
         self.load_description(descr, munit)
         self.indication_list = list()
-        
+
     def add_indication(self, indication):
         ''' добавить одно значение типа Indication
             предварительно проверив есть ли за данное время данные
@@ -49,15 +49,15 @@ class Detector():
             for newIndication in detector2.get_indication_list():
                 self.add_indication(newIndication)
             self.sort_indication_list()
-    
+
     def load_description(self, descr='', munit=''):
         '''
             Загрузить описание из DetectorsInfo
         '''
         self.description = self.detectors_info.get_info(self.kks)
-        if self.description['name']  == '' and descr:
+        if self.description['name'] == '' and descr:
             self.description['name'] = descr
-        if self.description['munit']  == '' and munit:
+        if self.description['munit'] == '' and munit:
             self.description['munit'] = munit
 
     def sort_indication_list(self, reverse=False):
@@ -81,7 +81,7 @@ class Detector():
     def __lt__(self, other):
         '''сравнение 2 значений'''
         return self.kks < other.kks
-    
+
     def copy(self):
         '''скопировать объект'''
         return copy.deepcopy(self)
@@ -101,7 +101,7 @@ class Detector():
             if val.dt >= dt:
                 return val
         return self.indication_list[-1]
-    
+
     def calculate_statistic(self):
         '''
         возвращает массив со статистикой
@@ -118,7 +118,7 @@ class Detector():
         error = statUtils.calcError(sko, len(values))
         outliers_percent = statUtils.calc_outliers(self.get_value_list(), self.description['delta'], mean)
         rate_of_change = statUtils.calc_rate_of_change(values)
-        
+
         return {
                 'mean': mean,
                 'sko': sko,
@@ -137,7 +137,7 @@ class Detector():
         if self.description['name']:
             return self.description['name']
         return ''
-    
+
     def get_munit(self):
         '''возвращает описание датчика'''
         if self.description['munit']:
@@ -155,7 +155,7 @@ class Detector():
     def get_value_list(self):
         '''возвращает массив значений показаний'''
         return [val.value for val in self.indication_list]
-    
+
     def get_true_value_list(self):
         '''возвращает массив достоверных занчений значений показаний'''
         return [val.value for val in self.indication_list if val.status != 7]
@@ -171,7 +171,7 @@ class Detector():
     def get_finish_date(self):
         '''возвращает дату и время окончания данных'''
         return self.get_date_list()[-1]
-    
+
     def get_delta(self):
         '''возвращает допустимую погрешность'''
         if 'delta' in self.description:

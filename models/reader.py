@@ -26,22 +26,38 @@ def create_reader(file_name):
     _, extension = os.path.splitext(file_name)
     #  RSA файл
     if extension == '.rsa':
-        return RsaReader(file_name)
+        log.info('Создание RSAReader')
+        return RsaReader(file_name, 'koi8-r')
     # TXT файл(один из нескольких вариантов)
     elif extension == '.txt':
         # СВБУ с произвольным шагом и СВБУ с фиксировнным шагом
-        with open(file_name, 'r', encoding='utf-8') as f:
-            table_title = None
-            for _ in range(0, 4):
-                table_title = f.readline()
-            second_data = f.readline()
-            second_data = f.readline()
-            if (table_title.strip() == 'Время\tKKS\tЗнач\tЕд.изм\tДост\tОписание'):
-                if (second_data[0] != '\t'):
-                    return SVBUReader(file_name)
-                else:
-                    return SVBUFixedReader(file_name)
-
+        encodings = ['utf-8', 'windows-1251', 'koi8-r']
+        for encode in encodings:
+            print(encode)
+            try:
+                with open(file_name, 'r', encoding=encode) as f:
+                    table_title = None
+                    for _ in range(0, 4):
+                        table_title = f.readline()
+                    second_data = f.readline()
+                    second_data = f.readline()
+                    if (table_title.strip() == 'Время\tKKS\tЗнач\tЕд.изм\tДост\tОписание'):
+                        if (second_data[0] != '\t'):
+                            log.info('Создание SVBUFReader')
+                            return SVBUReader(file_name, encode)
+                        else:
+                            log.info('Создание SVBUFixedReader')
+                            return SVBUFixedReader(file_name, encode)
+                    else:
+                        date = ' '.join(table_title.strip().split()[:2])
+                        try:
+                            datetime.datetime.strptime(date, '%d.%m.%Y %H:%M:%S.%f')
+                            log.info('Создание SVBUSimpeReader')
+                        except Exception:
+                            log.info('Это не SVBUSImpleReader')
+            except Exception:
+                log.warning('Кодировка {} не подошла для файла {}'.format(encode, file_name))
+                print('Кодировка {} не подошла для файла {}'.format(encode, file_name))
 
 class Reader():
     """
@@ -50,9 +66,10 @@ class Reader():
     и сохранение в DetectorList в методе read_file
     """
 
-    def __init__(self, file_name: str):
+    def __init__(self, file_name: str, encode:str):
         super().__init__()
         self.file_name = file_name
+        self.encode = encode
 
     def read_file(self):
         """
@@ -88,7 +105,7 @@ class RsaReader(Reader):
             return None
         
         detector_list = DetectorList()
-        with open(self.file_name, 'r', encoding='koi8-r') as rsafile:
+        with open(self.file_name, 'r', encoding=self.encode) as rsafile:
             for line in rsafile:
                 # если в файле найдена строка с KKS выделить KKS
                 # и заполнить detector_list KKS и пустым списком с Indication
@@ -138,7 +155,7 @@ class SVBUReader(Reader):
             return None
         
         detector_list = DetectorList()
-        with open(self.file_name, encoding='utf-8') as file:
+        with open(self.file_name, encoding=self.encode) as file:
             for line in file:
                 values = line.split('\t')
                 # проверка, если строка начинается с числа(даты), то это строка с данными
@@ -166,8 +183,10 @@ class SVBUReader(Reader):
 
 
 class SVBUFixedReader(Reader):
-    """Реалищация Reader класса для считывания инфомации из
-    СВБУ файлов с фиксированным шагом"""
+    """
+        Реализация Reader класса для считывания инфомации из
+        СВБУ файлов с фиксированным шагом
+    """
 
     @timer
     def read_file(self):
@@ -180,7 +199,7 @@ class SVBUFixedReader(Reader):
             return None
        
         detector_list = DetectorList()
-        with open(self.file_name, encoding='utf-8') as file:
+        with open(self.file_name, encoding=self.encode) as file:
             
             for line in file:
                 values = line.split('\t')
@@ -216,6 +235,30 @@ class SVBUFixedReader(Reader):
         log.info('СВБУ файл с фиксированным шагом прочитан')
         return detector_list
 
+class SVBUSimpeReader(Reader):
+    """
+    Реализация Reader класса для считывания инфомации из
+    СВБУ файлов вида
+    1. KKS
+    2. Название
+    3. Дата время данные
+    """
+
+@timer
+def read_file(self):
+    log.info(f'Чтение простого СВБУ файла текстового формата  : {self.file_name}')
+    super().read_file()
+
+    if not self.file_exist:
+        log.warning(f'Файл {self.file_name} не найден')
+        return None
+
+    detector_list = DetectorList()
+    with open(self.file_name, encoding=self.encode) as file:
+
+        for line in file:
+            values = line.split('\t')
+# !!!!ЧТЕНИЕ ФАЙЛА
 
 def is_float(val):
     """Проверка является ли строка числом

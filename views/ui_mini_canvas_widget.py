@@ -25,9 +25,11 @@ class Canvas(FigureCanvas):
         self.setParent(parent)
 
     # отрисовка графика по заданным x,y
-    def plot_graph(self, x=None, y=None, lbl=''):
+    def plot_graph(self, detector=None, lbl=''):
         log.info('Отрисовка графика по заданным x,y')
         xlabel = ''
+        x = detector.get_date_list()
+        y = detector.get_value_list()
         if len(x) == 1:
             self.ax.scatter(x, y, label=lbl)
             xlabel = 'Дата и время: {}'.format(x[0])
@@ -37,8 +39,10 @@ class Canvas(FigureCanvas):
                 xlabel = 'Дата: {}'.format(x[0].strftime('%d.%m.%Y'))
             else:
                 xlabel = 'Дата: {} - {}'.format(x[0].strftime('%d.%m.%y'), x[-1].strftime('%d.%m.%y'))
-
-        self.ax.set_ylabel('Значение', weight='bold', fontsize=13)
+        detector_name = detector.get_name()
+        if not detector_name:
+            detector_name = 'Значение'
+        self.ax.set_ylabel(detector_name, weight='bold', fontsize=13)
         self.ax.set_xlabel(xlabel, weight='bold', fontsize=13)
         self.ax.xaxis.set_major_formatter(dates.DateFormatter('%H:%M:%S'))
         self.ax.grid()
@@ -84,8 +88,8 @@ class MiniCanvasWidget(QtWidgets.QWidget):
         names = ['Среднее', 'СКО', 'Погрешность']
         for name, val in zip(names, stat.values()):
             lbl += '{:<11} : {}\n'.format(name, formatting_number(val))
-            
-        self.canvas.plot_graph(detector.get_date_list(), detector.get_value_list(), lbl)
+
+        self.canvas.plot_graph(detector, lbl)
         # отрисовка вертикальных линий,
         # которые выделяют рекомедуемое для расчета время
         if minOptimalTime and maxOptimalTime:
