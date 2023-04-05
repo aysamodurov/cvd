@@ -137,7 +137,7 @@ class RsaReader(Reader):
 
         for detector in detector_list:
             detector.indication_list.sort()
-        log.info('RSA файл прочитан')
+        log.info('RSA файл обработан! {}'.format(self.file_name))
         return detector_list
 
 
@@ -180,7 +180,7 @@ class SVBUReader(Reader):
                         detector_list.insert(detect)
                     except ValueError:
                         log.warning(f'Некорректный формат строки: {line}')
-        log.info('СВБУ файл прочитан')
+        log.info('СВБУ файл обработан! {}'.format(self.file_name))
         return detector_list
 
 
@@ -234,7 +234,7 @@ class SVBUFixedReader(Reader):
                     except ValueError:
                         log.warning(f'Некорректный формат строки: {line}')
                         continue
-        log.info('СВБУ файл с фиксированным шагом прочитан')
+        log.info('СВБУ файл с фиксированным шагом обработан! {} '.format(self.file_name))
         return detector_list
 
 
@@ -268,7 +268,6 @@ class TxtReader(Reader):
             for kks, description in zip(kks_list, description_list):
                 detector_list.insert(Detector(kks, descr=description))
 
-
             # чтение показаний
             for line in file:
                 # если встретилась непустая строка с показаниями
@@ -279,6 +278,7 @@ class TxtReader(Reader):
                         if is_float(value):
                             indication = Indication(date, float(value), 0)
                             detector_list[index].add_indication(indication)
+        log.info('Текстовый файл обработан! {} '.format(self.file_name))
         return detector_list
 
 
