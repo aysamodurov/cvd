@@ -268,8 +268,7 @@ class TxtReader(Reader):
             for kks, description in zip(kks_list, description_list):
                 detector_list.insert(Detector(kks, descr=description))
 
-            # пустая строка
-            # file.readline()
+
             # чтение показаний
             for line in file:
                 # если встретилась непустая строка с показаниями
