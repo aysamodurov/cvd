@@ -41,8 +41,8 @@ def create_reader(file_name):
                         table_title = f.readline()
                     second_data = f.readline()
                     second_data = f.readline()
-                    if (table_title.strip() == 'Время\tKKS\tЗнач\tЕд.изм\tДост\tОписание'):
-                        if (second_data[0] != '\t'):
+                    if table_title.strip() == 'Время\tKKS\tЗнач\tЕд.изм\tДост\tОписание':
+                        if second_data[0] != '\t':
                             log.info('Создание SVBUFReader')
                             return SVBUReader(file_name, encode)
                         else:
@@ -52,21 +52,23 @@ def create_reader(file_name):
                         date = ' '.join(table_title.strip().split()[:2])
                         try:
                             datetime.datetime.strptime(date, '%d.%m.%Y %H:%M:%S.%f')
-                            log.info('Создание SVBUSimpeReader')
+                            log.info('Создание TxtReader')
+                            return TxtReader(file_name, encode)
                         except Exception:
-                            log.info('Это не SVBUSImpleReader')
-            except Exception:
+                            log.info('Это не TxtReader')
+            except UnicodeDecodeError:
                 log.warning('Кодировка {} не подошла для файла {}'.format(encode, file_name))
                 print('Кодировка {} не подошла для файла {}'.format(encode, file_name))
 
-class Reader():
+
+class Reader:
     """
     Класс родитель для всех Reader
     Применение - чтение информации из файлов с данными
     и сохранение в DetectorList в методе read_file
     """
 
-    def __init__(self, file_name: str, encode:str):
+    def __init__(self, file_name: str, encode: str):
         super().__init__()
         self.file_name = file_name
         self.encode = encode
@@ -209,7 +211,7 @@ class SVBUFixedReader(Reader):
                     dt = datetime.datetime.strptime(values[0], '%d.%m.%y %H:%M:%S')
                     values[0] = ''
 #                 считываем значения
-                if (values[0] == ''):
+                if values[0] == '':
                     try:
                         kks = values[1]
                         
@@ -235,30 +237,51 @@ class SVBUFixedReader(Reader):
         log.info('СВБУ файл с фиксированным шагом прочитан')
         return detector_list
 
-class SVBUSimpeReader(Reader):
+
+class TxtReader(Reader):
     """
     Реализация Reader класса для считывания инфомации из
-    СВБУ файлов вида
+    txt файлов вида
     1. KKS
     2. Название
     3. Дата время данные
     """
 
-@timer
-def read_file(self):
-    log.info(f'Чтение простого СВБУ файла текстового формата  : {self.file_name}')
-    super().read_file()
+    @timer
+    def read_file(self):
+        log.info(f'Чтение простого файла текстового формата  : {self.file_name}')
+        super().read_file()
 
-    if not self.file_exist:
-        log.warning(f'Файл {self.file_name} не найден')
-        return None
+        if not self.file_exist:
+            log.warning(f'Файл {self.file_name} не найден')
+            return None
 
-    detector_list = DetectorList()
-    with open(self.file_name, encoding=self.encode) as file:
+        detector_list = DetectorList()
+        with open(self.file_name, encoding=self.encode) as file:
+            # строка с KKS
+            kks_list = file.readline().split('\t')
+            # строка с названиями
+            description_list = file.readline().split('\t')
+            if len(kks_list) != len(description_list):
+                log.error('Количество KKS и описаний в файле не совпадает')
+                description_list.extend(['']*(len(kks_list)-len(description_list)))
+            for kks, description in zip(kks_list, description_list):
+                detector_list.insert(Detector(kks, descr=description))
 
-        for line in file:
-            values = line.split('\t')
-# !!!!ЧТЕНИЕ ФАЙЛА
+            # пустая строка
+            # file.readline()
+            # чтение показаний
+            for line in file:
+                # если встретилась непустая строка с показаниями
+                if line.strip():
+                    values = line.strip().split('\t')
+                    date = datetime.datetime.strptime(values.pop(0), '%d.%m.%Y %H:%M:%S.%f').replace(microsecond=0)
+                    for index, value in enumerate(values):
+                        if is_float(value):
+                            indication = Indication(date, float(value), 0)
+                            detector_list[index].add_indication(indication)
+        return detector_list
+
 
 def is_float(val):
     """Проверка является ли строка числом
