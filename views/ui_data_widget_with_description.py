@@ -14,7 +14,7 @@ import logging
 log = logging.getLogger(__name__)
 
 
-class DataWidget(QtWidgets.QWidget):
+class DataWidgetWithDescription(QtWidgets.QWidget):
     '''
         Виджет для отображения в первой вкладке приложения
         на нем расположен список с kks, фильтр, и график
@@ -69,10 +69,11 @@ class DataWidget(QtWidgets.QWidget):
         #         ГЛАВНЫЙ ЭКРАН
         mainBox = QtWidgets.QGridLayout()
         mainBox.addLayout(leftBox, 0, 0, 2, 1)
-        mainBox.setColumnStretch(0, 0)
+        mainBox.setColumnStretch(0, 3)
+        # mainBox.setColumnStretch(1, 1)
         mainBox.addWidget(self.canvasWidget, 0, 1, 1, 1)
         mainBox.addLayout(dateBox, 1, 1, 1, 1)
-        mainBox.setColumnStretch(1, 1)
+        mainBox.setColumnStretch(1, 7)
         self.setLayout(mainBox)
         self.setAcceptDrops(True)
 
@@ -117,6 +118,7 @@ class DataWidget(QtWidgets.QWidget):
             config.write_value('detectorInfoFile', 'filename', config_filename)
             log.info(f'Изменен файл с настроечной информацией о датчиках {file_path}')
             self.detectorController.update_all_description()
+            self.update_kks_view()
 
     @QtCore.pyqtSlot()
     def on_changed_item(self):
@@ -151,9 +153,10 @@ class DataWidget(QtWidgets.QWidget):
         changeKksList = list()
         for detect in self.detectorController.allDetectors:
             kks = detect.get_kks()
-            res = re.match(reg, kks)
+            descr = kks + detect.get_name()
+            res = re.match(reg, descr)
             if res:
-                changeKksList.append(kks)
+                changeKksList.append(kks+'\t'+detect.get_name())
         self.kksView.clear()
         self.kksView.addItems(changeKksList)
 
@@ -190,7 +193,11 @@ class DataWidget(QtWidgets.QWidget):
             log.warning(f'Не задан текущий датчик')
             return
         log.info('Вычисление статистических показателей')
-        rows = self.detectorController.get_statisctic_table_rows()
+        # Выбрать только отфильтрованные датчики
+        selected_kks_list = []
+        for ind in range(self.kksView.count()-1):
+            selected_kks_list.append(self.kksView.item(ind).text().split('\t')[0])
+        rows = self.detectorController.get_statisctic_table_rows(selected_kks_list)
         self.parent.statTable.fill_table(rows)
         self.parent.tabWidget.setCurrentIndex(2)
 
@@ -218,7 +225,7 @@ class DataWidget(QtWidgets.QWidget):
             menu.addAction('Скользящее среднее', self.on_mooving_avarage)
             if menu.exec_(event.globalPos()):
                 item: QtWidgets.QListWidgetItem = source.itemAt(event.pos())
-        return super(DataWidget, self).eventFilter(source, event)
+        return super(DataWidgetWithDescription, self).eventFilter(source, event)
 
     # МЕНЮ ПРИ НАЖАТИИ НА ГРАФИК
     def canvas_context_menu(self, point):
@@ -332,7 +339,7 @@ class DataWidget(QtWidgets.QWidget):
         self.parent.mainCanvas.clear()
 
         for ind in self.kksView.selectedIndexes():
-            kks = self.kksView.model().data(ind)
+            kks = self.kksView.model().data(ind).split('\t')[0]
             detector = self.detectorController.allDetectors.get_detector_by_kks(kks)
             self.parent.mainCanvas.plot(detector)
         self.parent.tabWidget.setCurrentIndex(1)
@@ -341,7 +348,7 @@ class DataWidget(QtWidgets.QWidget):
         '''добавление графика к существующим на вкладке график'''
         log.info('добавление графика к существующим на вкладке график')
         for ind in self.kksView.selectedIndexes():
-            kks = self.kksView.model().data(ind)
+            kks = self.kksView.model().data(ind).split('\t')[0]
             detector = self.detectorController.allDetectors.get_detector_by_kks(kks)
             self.parent.mainCanvas.plot(detector)
         self.parent.tabWidget.setCurrentIndex(1)

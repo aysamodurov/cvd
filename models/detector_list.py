@@ -46,6 +46,7 @@ class DetectorList(list):
         -------
         Detector - Копия датчика из общего списка
         '''
+        kks = kks.split('\t')[0]
         detector = copy.deepcopy(self.get_detector_by_kks(kks))
 
         # проверяем дату и время выборки данных

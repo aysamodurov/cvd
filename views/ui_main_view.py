@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from PyQt5 import QtWidgets
 from detector_controller import DetectorController
-from views import DataWidget
+from views.ui_data_widget_with_description import DataWidgetWithDescription
 from views import MainCanvasWidget
 from views.ui_stat_table_view import StatisticTableWidget
 
@@ -14,13 +14,13 @@ class MyMainWindow(QtWidgets.QMainWindow):
 
     def __init__(self, parent=None):
         super().__init__(parent)
-        self.resize(1200, 700)
+        self.resize(1400, 700)
         self.setWindowTitle('CVD 0.1')
 
         # создание окна с вкладками
         self.tabWidget = QtWidgets.QTabWidget()
 
-        self.dataWidget = DataWidget(self.detectorController, self)
+        self.dataWidget = DataWidgetWithDescription(self.detectorController, self)
         self.tabWidget.addTab(self.dataWidget, 'Данные')
 
         self.mainCanvas = MainCanvasWidget(self)

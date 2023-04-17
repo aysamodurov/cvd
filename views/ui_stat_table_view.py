@@ -37,6 +37,7 @@ class StatisticTableWidget(QtWidgets.QWidget):
         for row in range(self.table.rowCount()):
             row_values = [self.table.item(row, column).text().strip() for column in range(self.table.columnCount())]
             res += '\t'.join(row_values) + '\n'
+
         QtWidgets.QApplication.clipboard().setText(res)
 
     # заполнение таблицы

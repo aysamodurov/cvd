@@ -65,6 +65,9 @@ class DetectorController():
         log.info(f'Обновление текущего датчика на {kks}')
         if kks == '':
             kks = self.currentDetector.get_kks()
+        else:
+            kks = kks.split('\t')[0]
+
         self.currentDetector = self.allDetectors.get_detector(kks)
         detect = self.allDetectors.get_detector(kks, self.startDate, self.finishDate)
         self.update_current_min_max_date()
@@ -121,9 +124,10 @@ class DetectorController():
         return ["KKS", "Назвнание", "Ед.изм.", "Среднее значение", "СКО", 
                 "Погрешность", "Скорость", "Кол-во значений",  "Выброс, %"]
     
-    def get_statisctic_table_rows(self):
+    def get_statisctic_table_rows(self, kks_list):
         '''
         получить отформатированные строки для отображения в таблице
+        kks_list : список с kks
 
         Returns
         -------
@@ -134,7 +138,7 @@ class DetectorController():
         '''
         log.info('Получение статистических данных для всех датчиков')
         res = []
-        for kks in self.allDetectors.get_all_kks():
+        for kks in kks_list:
             detect = self.allDetectors.get_detector(kks, self.startDate, self.finishDate)
             statisctic_row = []
             statisctic_row.append((detect.get_kks(),   True))

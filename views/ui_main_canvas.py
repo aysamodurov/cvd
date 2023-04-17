@@ -85,7 +85,7 @@ class Canvas(FigureCanvas):
         if not self.axesList:
             ax = self.fig.add_subplot()
             ax.xaxis.set_major_formatter(dates.DateFormatter('%H:%M:%S'))
-            ax.grid(b=True)
+            # ax.grid(b=True)
         else:
             ax = self.axesList[0].twinx()
 

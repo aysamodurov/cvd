@@ -1,9 +1,10 @@
 test.py
 mpl.py
-res.txt
+*.txt
+
 venv/
 logs/
 .vscode/
 .idea/
 __pycache__/
-
+output/
