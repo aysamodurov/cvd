@@ -53,7 +53,7 @@ def formatting_number(num, prec=None):
         try:
             prec = int(config.read_value('formatting', 'precision', 3)) + 1
             prec = prec - len(str(int(num)))
-            if prec < 0 :
+            if prec < 0:
                 prec = 0
             num = float(num)
         except ValueError:

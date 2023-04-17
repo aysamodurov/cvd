@@ -37,19 +37,21 @@ def create_reader(file_name):
             try:
                 with open(file_name, 'r', encoding=encode) as f:
                     table_title = None
-                    for _ in range(0, 4):
+                    for _ in range(0, 2):
                         table_title = f.readline()
-                    second_data = f.readline()
-                    second_data = f.readline()
-                    if table_title.strip() == 'Время\tKKS\tЗнач\tЕд.изм\tДост\tОписание':
-                        if second_data[0] != '\t':
-                            log.info('Создание SVBUFReader')
-                            return SVBUReader(file_name, encode)
-                        else:
+                    for _ in range(0, 4):
+                        second_data = f.readline()
+                    if table_title.strip().split(':')[0] == 'Имя пользователя':
+                        if second_data[0] == '\t':
                             log.info('Создание SVBUFixedReader')
                             return SVBUFixedReader(file_name, encode)
+
+                        else:
+                            log.info('Создание SVBUFReader')
+                            return SVBUReader(file_name, encode)
                     else:
-                        date = ' '.join(table_title.strip().split()[:2])
+                        date = ' '.join(second_data.strip().split()[:2])
+                        print(date)
                         try:
                             datetime.datetime.strptime(date, '%d.%m.%Y %H:%M:%S.%f')
                             log.info('Создание TxtReader')
@@ -214,7 +216,13 @@ class SVBUFixedReader(Reader):
                 if values[0] == '':
                     try:
                         kks = values[1]
-                        
+                        detect = detector_list.get_detector_by_kks(kks)
+                        if not detect:
+                            desc = values[5]
+                            munit = values[3]
+                            detect = Detector(kks, desc, munit)
+                            detector_list.insert(detect)
+
                         value = 0
                         if is_float(values[2]):
                             value = float(values[2])
@@ -224,13 +232,11 @@ class SVBUFixedReader(Reader):
                         if values[4] == 'дост':
                             status = 0
                             
-                        desc = values[5]
-                        munit = values[3]
+
     #                     добавление нового датчика
-                        detect = Detector(kks, desc, munit)
                         indication = Indication(dt, value, status)
                         detect.add_indication(indication)
-                        detector_list.insert(detect)
+
                     except ValueError:
                         log.warning(f'Некорректный формат строки: {line}')
                         continue
@@ -271,8 +277,9 @@ class TxtReader(Reader):
             # чтение показаний
             for line in file:
                 # если встретилась непустая строка с показаниями
-                if line.strip():
-                    values = line.strip().split('\t')
+                line = line.strip()
+                if line:
+                    values = line.split('\t')
                     date = datetime.datetime.strptime(values.pop(0), '%d.%m.%Y %H:%M:%S.%f').replace(microsecond=0)
                     for index, value in enumerate(values):
                         if is_float(value):

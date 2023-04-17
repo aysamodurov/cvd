@@ -45,7 +45,7 @@ class StatisticTableWidget(QtWidgets.QWidget):
         
         # столбец с выбросами 
         
-        # очищаю таблицу отстарых дынных
+        # очищаю таблицу от старых дынных
         self.table.setRowCount(0)
         for row in rows:
             number_new_row = self.table.rowCount()
@@ -53,6 +53,6 @@ class StatisticTableWidget(QtWidgets.QWidget):
             for number_column, value in enumerate(row):
                 self.table.setItem(number_new_row, number_column, QtWidgets.QTableWidgetItem(value[0]))
                 if not value[1]:
-                    self.table.item(number_new_row, number_column).setBackground(QColor(255,0,0))
+                    self.table.item(number_new_row, number_column).setBackground(QColor(255, 0, 0))
             self.table.resizeColumnsToContents()
         

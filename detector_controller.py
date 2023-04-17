@@ -81,8 +81,9 @@ class DetectorController():
         """
             Обновить время выбранного интервала
         """
-        log.info(f'Обновление времени начала данных и окончания для датчика {self.currentDetector.get_kks()}')
+
         if self.currentDetector:
+            log.info(f'Обновление времени начала данных и окончания для датчика {self.currentDetector.get_kks()}')
             self.minDate = self.currentDetector.get_start_date()
             self.maxDate = self.currentDetector.get_finish_date()
         else:
@@ -118,7 +119,7 @@ class DetectorController():
 
         '''
         return ["KKS", "Назвнание", "Ед.изм.", "Среднее значение", "СКО", 
-                "Погрешность", "Выброс, %", "Скорость", "Кол-во значений"]
+                "Погрешность", "Скорость", "Кол-во значений",  "Выброс, %"]
     
     def get_statisctic_table_rows(self):
         '''
@@ -153,10 +154,10 @@ class DetectorController():
                 max_outliers_percent = 10
                 
             statisctic_row.append((formatting_number(statistic['error']), is_reliable_error))
-            statisctic_row.append((formatting_number(statistic['outliers_percent'],2), statistic['outliers_percent']<max_outliers_percent))
             statisctic_row.append((formatting_number(statistic['rate_of_change']), True))
-            
             statisctic_row.append((formatting_number(detect.count(), 0), True))
+            statisctic_row.append((formatting_number(statistic['outliers_percent'], 2),
+                                   statistic['outliers_percent'] < max_outliers_percent))
                                     
             res.append(statisctic_row)
         return res

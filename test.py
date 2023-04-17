@@ -15,7 +15,7 @@ def main():
 
     with open('res.txt', 'w') as res_file:
         print(detectors, file=res_file)
-    # print(detectors)
+    print(detectors)
 
 
 if __name__ == '__main__':
