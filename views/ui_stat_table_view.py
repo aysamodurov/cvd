@@ -12,6 +12,8 @@ class StatisticTableWidget(QtWidgets.QWidget):
         super().__init__(parent)
         self.detectorController = detectorController
         vbox = QtWidgets.QVBoxLayout()
+
+        self.timeLabel = QtWidgets.QLabel('Время выборки :')
         
         # таблица для отображения статистики
         self.column_names = detectorController.get_statistic_table_headers()
@@ -24,6 +26,7 @@ class StatisticTableWidget(QtWidgets.QWidget):
         # кнопка скопировать статистику
         self.btnCopyStat = QtWidgets.QPushButton('Скопировать')
 
+        vbox.addWidget(self.timeLabel)
         vbox.addWidget(self.table)
         vbox.addWidget(self.btnCopyStat)
         self.btnCopyStat.clicked.connect(self.copy_stat)
@@ -32,7 +35,12 @@ class StatisticTableWidget(QtWidgets.QWidget):
     @QtCore.pyqtSlot()
     def copy_stat(self):
         log.info('Копирование таблицы со статистикой в буфер обмена')
-        res = '\t'.join(self.column_names) + '\n'
+
+        # сохранение в буфер обмена времени выборки
+        res = 'Расчитаны значения для временного интервала с {} до {}\n'.format(self.detectorController.startDate.strftime("%d.%m.%Y %H:%M:%S"),
+                                                                                self.detectorController.finishDate.strftime("%d.%m.%Y %H:%M:%S"))
+        # сохранение в буфер обмена шапку таблицы
+        res += '\t'.join(self.column_names) + '\n'
         
         for row in range(self.table.rowCount()):
             row_values = [self.table.item(row, column).text().strip() for column in range(self.table.columnCount())]
@@ -43,9 +51,13 @@ class StatisticTableWidget(QtWidgets.QWidget):
     # заполнение таблицы
     def fill_table(self, rows):
         log.info('Заполнение таблицы со статистикой')
-        
-        # столбец с выбросами 
-        
+
+        # заполнить поле со временем выборки
+        self.timeLabel.setText(f'Расчитаны значения для временного интервала с '
+                               f'{self.detectorController.startDate.strftime("%d.%m.%Y %H:%M:%S")} по'
+                               f' {self.detectorController.finishDate.strftime("%d.%m.%Y %H:%M:%S")}')
+
+
         # очищаю таблицу от старых дынных
         self.table.setRowCount(0)
         for row in rows:
