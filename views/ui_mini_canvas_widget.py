@@ -39,11 +39,9 @@ class Canvas(FigureCanvas):
                 xlabel = 'Дата: {}'.format(x[0].strftime('%d.%m.%Y'))
             else:
                 xlabel = 'Дата: {} - {}'.format(x[0].strftime('%d.%m.%y'), x[-1].strftime('%d.%m.%y'))
-        detector_name = detector.get_name()
-        if not detector_name:
-            detector_name = detector.get_kks()
-        self.ax.set_ylabel(detector_name, weight='bold', fontsize=13)
-        self.ax.set_xlabel(xlabel, weight='bold', fontsize=13)
+        detector_name = (detector.get_name() +' '+ detector.get_kks())[:45]
+        self.ax.set_ylabel(detector_name, weight='bold', fontsize=12)
+        self.ax.set_xlabel(xlabel, weight='bold', fontsize=12)
         self.ax.xaxis.set_major_formatter(dates.DateFormatter('%H:%M:%S'))
         self.ax.grid()
         self.ax.legend(loc='lower right')

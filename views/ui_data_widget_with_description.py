@@ -129,8 +129,8 @@ class DataWidgetWithDescription(QtWidgets.QWidget):
 
             current_kks = self.kksView.model().data(self.kksView.currentIndex())
 
-            if self.detectorController.currentDetector.get_kks() == current_kks:
-                return
+            # if self.detectorController.currentDetector.get_kks() == current_kks:
+            #     return
 
             log.info('Изменение текущего датчика')
             self.detectorController.update_current_detector(current_kks)
