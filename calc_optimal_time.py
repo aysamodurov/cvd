@@ -44,7 +44,7 @@ def get_optimal_time(detectorList, startDate, finishDate, times=60):
         return None, None
     valueList = []
     for kks in detectorList.get_all_kks():
-        detector = detectorList.get_detector(kks, startDate, finishDate)
+        detector = detectorList.get_detector_copy(kks, startDate, finishDate)
         valueList.append(np.array(detector.get_value_list()))
     optimal_pos = 0
     min_sko = -1

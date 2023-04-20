@@ -1,4 +1,3 @@
-from views.ui_data_widget import DataWidget
 from views.ui_main_canvas import MainCanvasWidget
 from views.ui_main_view import MyMainWindow
 from views.ui_data_widget_with_description import DataWidgetWithDescription

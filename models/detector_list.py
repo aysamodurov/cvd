@@ -1,7 +1,8 @@
-from models import Detector
-from datetime import timedelta
-from models.indication import Indication
 import copy
+from datetime import timedelta
+
+from models import Detector
+from models.indication import Indication
 
 
 class DetectorList(list):
@@ -11,8 +12,9 @@ class DetectorList(list):
         super().__init__()
 
     def insert(self, detector) -> bool:
-        '''расширить список self
-        detector  - Detector
+        '''
+            расширить список self
+            detector  - Detector
         '''
         allKks = self.get_all_kks()
         if detector.get_kks() in allKks:
@@ -24,7 +26,9 @@ class DetectorList(list):
             return True
 
     def extend(self, detector_list2):
-        '''расширить список self списком detector_list2'''
+        '''
+            расширить список self списком detector_list2
+        '''
         for detector in detector_list2:
             allKks = set(self.get_all_kks())
             if detector.get_kks() in allKks:
@@ -33,18 +37,18 @@ class DetectorList(list):
             else:
                 self.append(detector)
 
-    def get_detector(self, kks, start_time=None, finish_time=None) -> Detector:
+    def get_detector_copy(self, kks, start_time=None, finish_time=None) -> Detector:
         '''
             Поиск датчика по kks за определенный промежуто времени
             если параметры времени не заданы, то возвращает за все время что есть
             данные заполняются ежесекундно
             к случае пропусков в данных заполняется предыдущим значением
 
-        kks (str) : KKS
-        start_time (datetime) :  Дата и время начала выборки показаний
-        finishTime (datetime) : Дата и время окончания выборки показаний
-        -------
-        Detector - Копия датчика из общего списка
+            kks (str) : KKS
+            start_time (datetime) :  Дата и время начала выборки показаний
+            finishTime (datetime) : Дата и время окончания выборки показаний
+            -------
+            Detector - Копия датчика из общего списка
         '''
         kks = kks.split('\t')[0]
         detector = copy.deepcopy(self.get_detector_by_kks(kks))
@@ -69,12 +73,20 @@ class DetectorList(list):
             start_time += delta
         return detector
 
-    def get_detectors(self, kkslist, starttime=None, finishtime=None):
-        '''Возвращает показания по kks из kkslist за промежуток времени
-        от startdate до finishdate'''
+    def get_copy_detectors(self, kkslist, starttime=None, finishtime=None):
+        '''
+            Возвращает показания по kks из kkslist за промежуток времени
+            от startdate до finishdate
+
+            kkslist (list<str>) : список KKS
+            start_time (datetime) :  Дата и время начала выборки показаний
+            finishTime (datetime) : Дата и время окончания выборки показаний
+            -------
+            Return <list> - DetectorList список из копий датчиков
+        '''
         res = DetectorList()
         for kks in kkslist:
-            res.append(self.get_detector(kks, starttime, finishtime))
+            res.append(self.get_detector_copy(kks, starttime, finishtime))
         return res
 
     def get_all_kks(self):

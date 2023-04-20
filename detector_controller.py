@@ -14,23 +14,29 @@ class DetectorController():
 
     def __init__(self):
         log.info('Create detector controller')
+
         # список датчиков
         self.allDetectors = DetectorList()
+
         # файлы из которых считаны данные
         self.readedFiles = list()
+
         # время начала и окончания для выборки из данных
         self.startDate = None
         self.finishDate = None
+
         # границы для времени за которые есть данные
         self.maxDate = None
         self.minDate = None
+
         # выбранный детектор
         self.currentDetector = None
         self.minOptimalTime = None
         self.maxOptimalTime = None
 
     def loading_data(self, filesNames, isNewList=False):
-        '''загрузка файлов
+        '''
+            загрузка файлов
             filesName - имена файлов, которые необходимо загрузить
             isNewList - признак создания нового списка(удаление старых данных)
         '''
@@ -55,6 +61,7 @@ class DetectorController():
         self.update_current_min_max_date()
         if isNewList:
             self.reset_start_finish_date()
+
         log.info('В DetectorController загружены данные')
 
     def update_current_detector(self, kks=''):
@@ -63,20 +70,24 @@ class DetectorController():
             если за заданный промежуток нет данных, то сбросить время - ok
         '''
         log.info(f'Обновление текущего датчика на {kks}')
-        if kks == '':
+
+        if not kks:
             kks = self.currentDetector.get_kks()
         else:
             kks = kks.split('\t')[0]
+        try:
+            self.currentDetector = self.allDetectors.get_detector_copy(kks)
+        except Exception:
+            log.warning(f'Ошибка при обновлении датчика - {kks}')
+            detect = self.allDetectors.get_detector_copy(kks, self.startDate, self.finishDate)
 
-        self.currentDetector = self.allDetectors.get_detector(kks)
-        detect = self.allDetectors.get_detector(kks, self.startDate, self.finishDate)
-        self.update_current_min_max_date()
-        if detect.get_indication_list():
-            self.currentDetector = detect
-        else:
-            self.reset_start_finish_date()
+            self.update_current_min_max_date()
+            if detect.get_indication_list():
+                self.currentDetector = detect
+            else:
+                self.reset_start_finish_date()
         # выбор оптимального времени
-        self.minOptimalTime, self.maxOptimalTime = calc_optimal_time.get_optimal_detector_time(self.currentDetector)
+        # self.minOptimalTime, self.maxOptimalTime = calc_optimal_time.get_optimal_detector_time(self.currentDetector)
         # Обновить дату и время
         self.update_date(self.currentDetector.get_start_date(), self.currentDetector.get_finish_date())
 
@@ -98,7 +109,7 @@ class DetectorController():
         log.info(f'Сбросить дату вырезки данных на весь период')
         self.startDate = self.minDate
         self.finishDate = self.maxDate
-        self.minOptimalTime, self.maxOptimalTime = calc_optimal_time.get_optimal_detector_time(self.currentDetector)
+        # self.minOptimalTime, self.maxOptimalTime = calc_optimal_time.get_optimal_detector_time(self.currentDetector)
 
     # обновление даты в экземпляре класса
     def update_date(self, startDate, finishDate):
@@ -139,7 +150,7 @@ class DetectorController():
         log.info('Получение статистических данных для всех датчиков')
         res = []
         for kks in kks_list:
-            detect = self.allDetectors.get_detector(kks, self.startDate, self.finishDate)
+            detect = self.allDetectors.get_detector_copy(kks, self.startDate, self.finishDate)
             statisctic_row = []
             statisctic_row.append((detect.get_kks(),   True))
             statisctic_row.append((detect.get_name(),  True))

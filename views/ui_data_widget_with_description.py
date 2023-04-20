@@ -38,6 +38,7 @@ class DataWidgetWithDescription(QtWidgets.QWidget):
         kksFilterBox = QtWidgets.QHBoxLayout()
         kksFilterBox.addWidget(QtWidgets.QLabel('Маска:'))
         self.kksFilterEdit = QtWidgets.QLineEdit()
+        self.kksFilterEdit.setText('*')
         kksFilterBox.addWidget(self.kksFilterEdit)
         # listView для списка kks
         self.kksView = QtWidgets.QListWidget()
@@ -123,10 +124,15 @@ class DataWidgetWithDescription(QtWidgets.QWidget):
     @QtCore.pyqtSlot()
     def on_changed_item(self):
         '''Выбор другого датчика из списка'''
-        log.info('Изменение текущего датчика')
         # получаю kks
         if self.kksView.currentRow() != -1:
+
             current_kks = self.kksView.model().data(self.kksView.currentIndex())
+
+            if self.detectorController.currentDetector.get_kks() == current_kks:
+                return
+
+            log.info('Изменение текущего датчика')
             self.detectorController.update_current_detector(current_kks)
             self.canvasWidget.new_plot(self.detectorController.currentDetector)
             self.update_date_time()
@@ -134,8 +140,8 @@ class DataWidgetWithDescription(QtWidgets.QWidget):
     @QtCore.pyqtSlot()
     def on_change_datetime(self):
         '''перерисовка при изменении времени'''
-        log.info('Изменение времени выборки')
         if self.changeDateTime:
+            log.info('Изменение времени выборки')
             self.detectorController.update_date(self.startTimeEdit.dateTime().toPyDateTime(),
                                                 self.finishTimeEdit.dateTime().toPyDateTime())
             self.detectorController.update_current_detector()
@@ -144,7 +150,9 @@ class DataWidgetWithDescription(QtWidgets.QWidget):
 
     @QtCore.pyqtSlot()
     def changed_kks_mask(self):
-        ''' Ввод данных в поле маска '''
+        '''
+            Ввод данных в поле маска
+        '''
         reg = self.kksFilterEdit.text().strip()
         log.info(f'Ввод данных в поле маска {reg}')
         if reg == '':
@@ -195,7 +203,7 @@ class DataWidgetWithDescription(QtWidgets.QWidget):
         log.info('Вычисление статистических показателей')
         # Выбрать только отфильтрованные датчики
         selected_kks_list = []
-        for ind in range(self.kksView.count()-1):
+        for ind in range(self.kksView.count()):
             selected_kks_list.append(self.kksView.item(ind).text().split('\t')[0])
         rows = self.detectorController.get_statisctic_table_rows(selected_kks_list)
         self.parent.statTable.fill_table(rows)
@@ -248,6 +256,7 @@ class DataWidgetWithDescription(QtWidgets.QWidget):
         self.splash.close()
         self.update_kks_view()
         self.on_changed_item()
+        self.canvasWidget.new_plot(self.detectorController.currentDetector)
         self.parent.tabWidget.setCurrentIndex(0)
         log.info(f'Файлы {filesNames} обработаны')
 

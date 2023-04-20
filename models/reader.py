@@ -33,7 +33,6 @@ def create_reader(file_name):
         # СВБУ с произвольным шагом и СВБУ с фиксировнным шагом
         encodings = ['utf-8', 'windows-1251', 'koi8-r']
         for encode in encodings:
-            print(encode)
             try:
                 with open(file_name, 'r', encoding=encode) as f:
                     table_title = None
@@ -51,7 +50,6 @@ def create_reader(file_name):
                             return SVBUReader(file_name, encode)
                     else:
                         date = ' '.join(second_data.strip().split()[:2])
-                        print(date)
                         try:
                             datetime.datetime.strptime(date, '%d.%m.%Y %H:%M:%S.%f')
                             log.info('Создание TxtReader')
@@ -60,7 +58,6 @@ def create_reader(file_name):
                             log.info('Это не TxtReader')
             except UnicodeDecodeError:
                 log.warning('Кодировка {} не подошла для файла {}'.format(encode, file_name))
-                print('Кодировка {} не подошла для файла {}'.format(encode, file_name))
 
 
 class Reader:
@@ -265,9 +262,9 @@ class TxtReader(Reader):
         detector_list = DetectorList()
         with open(self.file_name, encoding=self.encode) as file:
             # строка с KKS
-            kks_list = file.readline().split('\t')
+            kks_list = file.readline().strip().split('\t')
             # строка с названиями
-            description_list = file.readline().split('\t')
+            description_list = file.readline().strip().split('\t')
             if len(kks_list) != len(description_list):
                 log.error('Количество KKS и описаний в файле не совпадает')
                 description_list.extend(['']*(len(kks_list)-len(description_list)))

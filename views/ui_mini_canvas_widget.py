@@ -41,7 +41,7 @@ class Canvas(FigureCanvas):
                 xlabel = 'Дата: {} - {}'.format(x[0].strftime('%d.%m.%y'), x[-1].strftime('%d.%m.%y'))
         detector_name = detector.get_name()
         if not detector_name:
-            detector_name = 'Значение'
+            detector_name = detector.get_kks()
         self.ax.set_ylabel(detector_name, weight='bold', fontsize=13)
         self.ax.set_xlabel(xlabel, weight='bold', fontsize=13)
         self.ax.xaxis.set_major_formatter(dates.DateFormatter('%H:%M:%S'))
@@ -59,7 +59,7 @@ class Canvas(FigureCanvas):
 
     # удаление всех графиков
     def clear_axes(self):
-        log.info('Удаление всех графиков')
+        log.info('Удаление всех графиков с Canvas')
         self.ax.clear()
         self.draw()
 
@@ -88,8 +88,8 @@ class MiniCanvasWidget(QtWidgets.QWidget):
         names = ['Среднее', 'СКО', 'Погрешность']
         for name, val in zip(names, stat.values()):
             lbl += '{:<11} : {}\n'.format(name, formatting_number(val))
-
         self.canvas.plot_graph(detector, lbl)
+
         # отрисовка вертикальных линий,
         # которые выделяют рекомедуемое для расчета время
         if minOptimalTime and maxOptimalTime:
@@ -100,7 +100,7 @@ class MiniCanvasWidget(QtWidgets.QWidget):
 
     # удаление всех графиков
     def clear(self):
-        log.info('Удаление всех графиков')
+        log.info('Удаление всех графиков c Widget')
         self.canvas.clear_axes()
 
     # рисование нового графика предварительно очистив оси
