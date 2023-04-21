@@ -118,21 +118,27 @@ class DetectorController():
     def update_date(self, startDate, finishDate):
         log.info(f'Обновить дату вырезки данных на {startDate} - {finishDate}')
 
+        # Проверка что даты в границе от minDate до maxDate
         if startDate > self.maxDate:
             startDate = self.maxDate - timedelta(seconds=1)
-
-        if finishDate < self.minDate:
-            finishDate = self.minDate + timedelta(seconds=1)
-
-        if self.minDate < startDate < finishDate:
-            self.startDate = startDate
         elif startDate < self.minDate:
-            self.startDate = self.minDate
+            startDate = self.minDate
 
-        if startDate < finishDate < self.maxDate:
-            self.finishDate = finishDate
-        elif finishDate > self.maxDate:
-            self.finishDate = self.maxDate
+        if finishDate > self.maxDate:
+            finishDate = self.maxDate
+        elif finishDate < self.minDate:
+            finishDate = startDate + timedelta(seconds=1)
+
+        # проверка что изменена дата начала выборки
+        if (startDate != self.startDate) and (startDate > finishDate):
+            startDate = finishDate - timedelta(seconds=1)
+
+        if (finishDate != self.finishDate) and (finishDate < startDate):
+            finishDate = startDate + timedelta(seconds=1)
+
+        self.startDate = startDate
+        self.finishDate = finishDate
+
 
     # автоматический выбор оптимального времени  для расчета
     def get_optimal_time(self):
