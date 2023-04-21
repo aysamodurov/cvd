@@ -79,20 +79,20 @@ class DetectorController():
 
         try:
             self.currentDetector = self.allDetectors.get_detector_copy(kks)
+            detect = self.allDetectors.get_detector_copy(kks, self.startDate, self.finishDate)
+
+            self.update_current_min_max_date()
+            if detect.get_indication_list():
+                self.currentDetector = detect
+            else:
+                self.reset_start_finish_date()
+            # выбор оптимального времени
+            # self.minOptimalTime, self.maxOptimalTime = calc_optimal_time.get_optimal_detector_time(self.currentDetector)
+            # Обновить дату и время
+            self.update_date(self.currentDetector.get_start_date(), self.currentDetector.get_finish_date())
         except Exception:
             log.warning(f'Ошибка при обновлении датчика - {kks}')
 
-        detect = self.allDetectors.get_detector_copy(kks, self.startDate, self.finishDate)
-
-        self.update_current_min_max_date()
-        if detect.get_indication_list():
-            self.currentDetector = detect
-        else:
-            self.reset_start_finish_date()
-        # выбор оптимального времени
-        # self.minOptimalTime, self.maxOptimalTime = calc_optimal_time.get_optimal_detector_time(self.currentDetector)
-        # Обновить дату и время
-        self.update_date(self.currentDetector.get_start_date(), self.currentDetector.get_finish_date())
 
     def update_current_min_max_date(self):
         """
