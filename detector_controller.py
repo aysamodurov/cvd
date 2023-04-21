@@ -6,6 +6,7 @@ import logging
 from models.detectors_info import DetectorsInfo
 from models.utils import formatting_number
 import config
+from datetime import timedelta
 
 log = logging.getLogger(__name__)
 
@@ -75,17 +76,19 @@ class DetectorController():
             kks = self.currentDetector.get_kks()
         else:
             kks = kks.split('\t')[0]
+
         try:
             self.currentDetector = self.allDetectors.get_detector_copy(kks)
         except Exception:
             log.warning(f'Ошибка при обновлении датчика - {kks}')
-            detect = self.allDetectors.get_detector_copy(kks, self.startDate, self.finishDate)
 
-            self.update_current_min_max_date()
-            if detect.get_indication_list():
-                self.currentDetector = detect
-            else:
-                self.reset_start_finish_date()
+        detect = self.allDetectors.get_detector_copy(kks, self.startDate, self.finishDate)
+
+        self.update_current_min_max_date()
+        if detect.get_indication_list():
+            self.currentDetector = detect
+        else:
+            self.reset_start_finish_date()
         # выбор оптимального времени
         # self.minOptimalTime, self.maxOptimalTime = calc_optimal_time.get_optimal_detector_time(self.currentDetector)
         # Обновить дату и время
@@ -114,8 +117,22 @@ class DetectorController():
     # обновление даты в экземпляре класса
     def update_date(self, startDate, finishDate):
         log.info(f'Обновить дату вырезки данных на {startDate} - {finishDate}')
-        self.startDate = startDate
-        self.finishDate = finishDate
+
+        if startDate > self.maxDate:
+            startDate = self.maxDate - timedelta(seconds=1)
+
+        if finishDate < self.minDate:
+            finishDate = self.minDate + timedelta(seconds=1)
+
+        if self.minDate < startDate < finishDate:
+            self.startDate = startDate
+        elif startDate < self.minDate:
+            self.startDate = self.minDate
+
+        if startDate < finishDate < self.maxDate:
+            self.finishDate = finishDate
+        elif finishDate > self.maxDate:
+            self.finishDate = self.maxDate
 
     # автоматический выбор оптимального времени  для расчета
     def get_optimal_time(self):
@@ -132,6 +149,7 @@ class DetectorController():
             Строка заговолков таблицы
 
         '''
+
         return ["KKS", "Назвнание", "Ед.изм.", "Среднее значение", "СКО", 
                 "Погрешность", "Скорость", "Кол-во значений",  "Выброс, %"]
     

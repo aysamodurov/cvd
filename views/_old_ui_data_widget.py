@@ -132,8 +132,9 @@ class DataWidget(QtWidgets.QWidget):
     @QtCore.pyqtSlot()
     def on_change_datetime(self):
         '''перерисовка при изменении времени'''
-        log.info('Изменение времени выборки')
+        log.info('Изменение времени выборки ')
         if self.changeDateTime:
+            log.info('a', self.startTimeEdit.dateTime().toPyDateTime())
             self.detectorController.update_date(self.startTimeEdit.dateTime().toPyDateTime(),
                                                 self.finishTimeEdit.dateTime().toPyDateTime())
             self.detectorController.update_current_detector()
@@ -262,9 +263,11 @@ class DataWidget(QtWidgets.QWidget):
         self.startTimeEdit.setMinimumDateTime(self.detectorController.minDate)
         self.startTimeEdit.setMaximumDateTime(self.detectorController.maxDate)
         self.startTimeEdit.setDateTime(self.detectorController.startDate)
+
         self.finishTimeEdit.setMinimumDateTime(self.detectorController.minDate)
         self.finishTimeEdit.setMaximumDateTime(self.detectorController.maxDate)
         self.finishTimeEdit.setDateTime(self.detectorController.finishDate)
+
         self.changeDateTime = True
 
     #     сглаживание данных

@@ -275,11 +275,12 @@ class DataWidgetWithDescription(QtWidgets.QWidget):
         '''обновить дату и время начала и окнчания данных'''
         self.changeDateTime = False
         #         обновляем дату и время, за которые есть данные
-        self.startTimeEdit.setMinimumDateTime(self.detectorController.minDate)
-        self.startTimeEdit.setMaximumDateTime(self.detectorController.maxDate)
+        # self.startTimeEdit.setMinimumDateTime(self.detectorController.minDate)
+        # self.startTimeEdit.setMaximumDateTime(self.detectorController.maxDate)
         self.startTimeEdit.setDateTime(self.detectorController.startDate)
-        self.finishTimeEdit.setMinimumDateTime(self.detectorController.minDate)
-        self.finishTimeEdit.setMaximumDateTime(self.detectorController.maxDate)
+
+        # self.finishTimeEdit.setMinimumDateTime(self.detectorController.minDate)
+        # self.finishTimeEdit.setMaximumDateTime(self.detectorController.maxDate)
         self.finishTimeEdit.setDateTime(self.detectorController.finishDate)
         self.changeDateTime = True
 
